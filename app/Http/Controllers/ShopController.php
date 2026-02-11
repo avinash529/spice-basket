@@ -16,13 +16,46 @@ class ShopController extends Controller
             ->take(6)
             ->get();
 
+        $offerProducts = Product::query()
+            ->where('is_active', true)
+            ->orderByDesc('is_featured')
+            ->orderByDesc('updated_at')
+            ->take(4)
+            ->get();
+
+        $giftBoxProducts = Product::query()
+            ->where('is_active', true)
+            ->with('category')
+            ->where(function ($builder) {
+                $builder
+                    ->where('name', 'like', '%gift%')
+                    ->orWhere('name', 'like', '%box%')
+                    ->orWhere('description', 'like', '%gift%')
+                    ->orWhereHas('category', function ($categoryQuery) {
+                        $categoryQuery
+                            ->where('name', 'like', '%gift%')
+                            ->orWhere('name', 'like', '%box%');
+                    });
+            })
+            ->take(4)
+            ->get();
+
+        if ($giftBoxProducts->isEmpty()) {
+            $giftBoxProducts = Product::query()
+                ->where('is_active', true)
+                ->where('is_featured', true)
+                ->with('category')
+                ->take(4)
+                ->get();
+        }
+
         $categories = Category::query()
             ->where('is_active', true)
             ->withCount('products')
             ->orderBy('name')
             ->get();
 
-        return view('shop.home', compact('featured', 'categories'));
+        return view('shop.home', compact('featured', 'offerProducts', 'giftBoxProducts', 'categories'));
     }
 
     public function index(Request $request)

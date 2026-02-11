@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Mail\OrderPlacedMail;
 use App\Models\Address;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class CheckoutAddressTest extends TestCase
@@ -115,6 +118,78 @@ class CheckoutAddressTest extends TestCase
             'shipping_district' => 'Thrissur',
             'shipping_pincode' => '680001',
         ]);
+    }
+
+    public function test_checkout_sends_order_confirmation_mail_to_customer(): void
+    {
+        Mail::fake();
+
+        $user = User::factory()->create();
+        $product = $this->createProduct();
+
+        $address = Address::create([
+            'user_id' => $user->id,
+            'full_name' => 'Mail Customer',
+            'phone' => '9876505555',
+            'house_street' => 'House 50, Market Road',
+            'district' => 'Alappuzha',
+            'pincode' => '688001',
+            'is_default' => true,
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->withSession(['cart' => $this->cartPayload($product)])
+            ->post(route('checkout.store'), [
+                'address_id' => $address->id,
+            ]);
+
+        $response->assertSessionHasNoErrors();
+
+        $order = Order::query()->latest('id')->firstOrFail();
+
+        Mail::assertSent(OrderPlacedMail::class, function (OrderPlacedMail $mail) use ($user, $order) {
+            return $mail->hasTo($user->email) && $mail->order->is($order);
+        });
+    }
+
+    public function test_checkout_requires_reconfirmation_if_spice_rates_change(): void
+    {
+        $user = User::factory()->create();
+        $product = $this->createProduct();
+
+        $address = Address::create([
+            'user_id' => $user->id,
+            'full_name' => 'Rate Change Customer',
+            'phone' => '9876507777',
+            'house_street' => 'House 90, Spice Road',
+            'district' => 'Kottayam',
+            'pincode' => '686001',
+            'is_default' => true,
+        ]);
+
+        $staleCart = $this->cartPayload($product);
+        $staleCart[$product->id]['price'] = 100;
+
+        $response = $this
+            ->actingAs($user)
+            ->withSession(['cart' => $staleCart])
+            ->post(route('checkout.store'), [
+                'address_id' => $address->id,
+            ]);
+
+        $response->assertRedirect(route('checkout.index'));
+        $response->assertSessionHas(
+            'status',
+            'Cart updated with latest rates and availability. Please review before placing the order.'
+        );
+        $response->assertSessionHas('cart', function (array $cart) use ($product): bool {
+            $line = collect($cart)->first();
+
+            return (float) ($line['price'] ?? 0) === (float) $product->price
+                && (int) ($line['quantity'] ?? 0) === 1;
+        });
+        $this->assertDatabaseCount('orders', 0);
     }
 
     private function createProduct(): Product

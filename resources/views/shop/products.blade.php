@@ -43,7 +43,7 @@
                                 $cardImage = asset('images/turmeric.png');
                             }
                         @endphp
-                        <div class="group rounded-3xl border border-stone-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                        <a href="{{ route('products.show', $product->slug) }}" class="group block rounded-3xl border border-stone-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300">
                             <div class="relative overflow-hidden rounded-2xl">
                                 <img src="{{ $cardImage }}" alt="{{ $product->name }}" class="h-44 w-full object-cover transition duration-500 group-hover:scale-105" />
                                 <div class="absolute top-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-stone-700">{{ $product->origin ?? 'Single origin' }}</div>
@@ -52,9 +52,9 @@
                             <p class="mt-2 text-sm text-stone-600">{{ $product->unit }}</p>
                             <div class="mt-4 flex items-center justify-between">
                                 <span class="font-semibold">INR {{ number_format($product->price, 2) }}</span>
-                                <a class="text-emerald-700 hover:text-emerald-600" href="{{ route('products.show', $product->slug) }}">View</a>
+                                <span class="text-emerald-700 group-hover:text-emerald-600">View</span>
                             </div>
-                        </div>
+                        </a>
                     @empty
                         <p class="text-stone-600">No products found.</p>
                     @endforelse

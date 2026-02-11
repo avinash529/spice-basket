@@ -129,6 +129,38 @@ class CartWeightSelectionTest extends TestCase
         });
     }
 
+    public function test_cart_page_refreshes_price_when_product_rate_changes(): void
+    {
+        $product = $this->createProduct('100g', 120);
+        $product->update(['price' => 150]);
+
+        $lineKey = $product->id.'::100g';
+        $response = $this
+            ->withSession([
+                'cart' => [
+                    $lineKey => [
+                        'key' => $lineKey,
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'price' => 120,
+                        'unit' => '100g',
+                        'quantity' => 2,
+                    ],
+                ],
+            ])
+            ->get(route('cart.index'));
+
+        $response->assertOk();
+        $response->assertSee('Some spice rates were refreshed to current prices.');
+        $response->assertSee('INR 300.00');
+        $response->assertSessionHas('cart', function (array $cart) use ($lineKey): bool {
+            $line = $cart[$lineKey] ?? [];
+
+            return (float) ($line['price'] ?? 0) === 150.0
+                && (int) ($line['quantity'] ?? 0) === 2;
+        });
+    }
+
     private function createProduct(?string $weight, float $price = 120): Product
     {
         return Product::create([

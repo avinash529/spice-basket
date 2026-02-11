@@ -9,6 +9,14 @@
             <div class="mt-4 rounded-xl bg-emerald-50 p-4 text-emerald-700">{{ session('status') }}</div>
         @endif
 
+        @if(!empty($notices))
+            <div class="mt-4 space-y-2">
+                @foreach($notices as $notice)
+                    <div class="rounded-xl bg-amber-50 p-4 text-amber-800">{{ $notice }}</div>
+                @endforeach
+            </div>
+        @endif
+
         @if(empty($cart))
             <div class="mt-6 rounded-2xl bg-white p-6 text-center shadow-sm">
                 <p class="text-gray-600">Your cart is empty.</p>

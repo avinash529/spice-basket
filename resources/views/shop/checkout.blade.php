@@ -3,6 +3,18 @@
         <h1 class="text-2xl font-semibold">Checkout</h1>
         <p class="mt-2 text-gray-600">Demo checkout. No payment is collected.</p>
 
+        @if(session('status'))
+            <div class="mt-4 rounded-xl bg-emerald-50 p-4 text-emerald-700">{{ session('status') }}</div>
+        @endif
+
+        @if(!empty($notices))
+            <div class="mt-4 space-y-2">
+                @foreach($notices as $notice)
+                    <div class="rounded-xl bg-amber-50 p-4 text-amber-800">{{ $notice }}</div>
+                @endforeach
+            </div>
+        @endif
+
         <div class="mt-6 rounded-2xl bg-white p-6 shadow-sm">
             <h2 class="font-semibold">Order summary</h2>
             <div class="mt-4 space-y-3">

@@ -1,53 +1,68 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <p class="text-xs uppercase tracking-[0.3em] text-emerald-600">Catalog</p>
                 <h2 class="font-semibold text-2xl text-stone-900 leading-tight">Add product</h2>
             </div>
-            <a class="text-sm text-emerald-700" href="{{ route('admin.categories.index') }}">Back to categories</a>
+            <a class="text-sm text-emerald-700" href="{{ route('admin.products.index') }}">Back to products</a>
         </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="rounded-3xl border border-emerald-100 bg-emerald-50/70 p-5 text-sm text-emerald-700">
-                Choose the category first. Products live inside categories.
-            </div>
+            @if(session('status'))
+                <div class="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4 text-emerald-700">{{ session('status') }}</div>
+            @endif
+            @if($errors->any())
+                <div class="rounded-2xl border border-rose-200 bg-rose-50/70 p-4 text-sm text-rose-700">
+                    Please fix the highlighted fields and submit again.
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('admin.products.store') }}" enctype="multipart/form-data" class="rounded-3xl border border-stone-100 bg-white/90 p-6 shadow-lg space-y-4">
                 @csrf
                 <div>
                     <label class="block text-sm font-medium text-stone-700">Name</label>
                     <input class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" type="text" name="name" value="{{ old('name') }}" required />
+                    @error('name')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-stone-700">Description</label>
                     <textarea class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" name="description" rows="3">{{ old('description') }}</textarea>
+                    @error('description')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
                 </div>
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
                         <label class="block text-sm font-medium text-stone-700">Price</label>
-                        <input class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" type="number" step="0.01" name="price" value="{{ old('price') }}" required />
+                        <input class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" type="number" step="0.01" min="0" name="price" value="{{ old('price') }}" required />
+                        @error('price')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-stone-700">Unit</label>
                         <input class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" type="text" name="unit" value="{{ old('unit', '100g') }}" required />
+                        @error('unit')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
                     </div>
                 </div>
+
                 @include('admin.products.partials.weight-options')
+
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
                         <label class="block text-sm font-medium text-stone-700">Stock quantity</label>
-                        <input class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" type="number" name="stock_qty" value="{{ old('stock_qty', 0) }}" required />
+                        <input class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" type="number" min="0" name="stock_qty" value="{{ old('stock_qty', 0) }}" required />
+                        @error('stock_qty')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-stone-700">Origin</label>
                         <input class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" type="text" name="origin" value="{{ old('origin') }}" />
+                        @error('origin')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
                     </div>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-stone-700">Image URL</label>
                     <input class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" type="text" name="image_url" value="{{ old('image_url') }}" />
+                    @error('image_url')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-stone-700">Image Upload</label>
@@ -64,24 +79,26 @@
                                 <option value="{{ $category->id }}" {{ old('category_id', $selectedCategoryId ?? '') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                             @endforeach
                         </select>
+                        @error('category_id')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-stone-700">Farmer</label>
                         <select class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" name="farmer_id">
                             <option value="">Select</option>
                             @foreach($farmers as $farmer)
-                                <option value="{{ $farmer->id }}">{{ $farmer->name }}</option>
+                                <option value="{{ $farmer->id }}" {{ old('farmer_id') == $farmer->id ? 'selected' : '' }}>{{ $farmer->name }}</option>
                             @endforeach
                         </select>
+                        @error('farmer_id')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
                     <label class="inline-flex items-center gap-2 text-sm">
-                        <input type="checkbox" name="is_active" value="1" checked />
+                        <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }} />
                         Active
                     </label>
                     <label class="inline-flex items-center gap-2 text-sm">
-                        <input type="checkbox" name="is_featured" value="1" />
+                        <input type="checkbox" name="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }} />
                         Featured
                     </label>
                 </div>

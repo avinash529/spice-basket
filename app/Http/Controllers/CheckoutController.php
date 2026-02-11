@@ -2,22 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderPlacedMail;
 use App\Models\Order;
 use App\Models\InventoryMovement;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Rules\KeralaPhone;
 use App\Rules\KeralaPincode;
+use App\Support\CartSynchronizer;
 use App\Support\Kerala;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class CheckoutController extends Controller
 {
     public function index(Request $request)
     {
-        $cart = $request->session()->get('cart', []);
+        $syncResult = $this->syncCart($request);
+        $cart = $syncResult['cart'];
 
         if (empty($cart)) {
             return redirect()->route('products.index')->with('status', 'Your cart is empty.');
@@ -34,15 +38,23 @@ class CheckoutController extends Controller
             'cart' => $cart,
             'totals' => $totals,
             'addresses' => $addresses,
+            'notices' => $this->syncNotices($syncResult),
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $cart = $request->session()->get('cart', []);
+        $syncResult = $this->syncCart($request);
+        $cart = $syncResult['cart'];
 
         if (empty($cart)) {
             return redirect()->route('products.index')->with('status', 'Your cart is empty.');
+        }
+
+        if ($syncResult['price_changed'] || $syncResult['item_removed'] || $syncResult['unit_adjusted']) {
+            return redirect()
+                ->route('checkout.index')
+                ->with('status', 'Cart updated with latest rates and availability. Please review before placing the order.');
         }
 
         $totals = $this->calculateTotals($cart);
@@ -129,6 +141,9 @@ class CheckoutController extends Controller
             ]);
         }
 
+        $order->loadMissing(['items.product', 'user']);
+        Mail::to($user->email)->send(new OrderPlacedMail($order));
+
         $request->session()->forget('cart');
 
         return redirect()->route('orders.show', $order)->with('status', 'Order placed successfully.');
@@ -146,5 +161,52 @@ class CheckoutController extends Controller
             'subtotal' => $subtotal,
             'total' => $subtotal,
         ];
+    }
+
+    /**
+     * @return array{
+     *     cart: array<string, array<string, mixed>>,
+     *     changed: bool,
+     *     price_changed: bool,
+     *     item_removed: bool,
+     *     unit_adjusted: bool
+     * }
+     */
+    private function syncCart(Request $request): array
+    {
+        $result = app(CartSynchronizer::class)->sync($request->session()->get('cart', []));
+
+        if ($result['changed']) {
+            $request->session()->put('cart', $result['cart']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array{
+     *     price_changed: bool,
+     *     item_removed: bool,
+     *     unit_adjusted: bool
+     * } $syncResult
+     * @return list<string>
+     */
+    private function syncNotices(array $syncResult): array
+    {
+        $notices = [];
+
+        if ($syncResult['price_changed']) {
+            $notices[] = 'Some spice rates were refreshed to current prices.';
+        }
+
+        if ($syncResult['unit_adjusted']) {
+            $notices[] = 'Some cart units were adjusted based on current product options.';
+        }
+
+        if ($syncResult['item_removed']) {
+            $notices[] = 'Unavailable items were removed from your cart.';
+        }
+
+        return $notices;
     }
 }

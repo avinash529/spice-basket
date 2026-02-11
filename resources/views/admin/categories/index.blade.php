@@ -32,14 +32,48 @@
                                         {{ $category->is_active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
-                                <td class="py-4 space-x-3">
-                                    <a class="text-emerald-700" href="{{ route('admin.products.create', ['category_id' => $category->id]) }}">Add product</a>
-                                    <a class="text-emerald-700" href="{{ route('admin.categories.edit', $category) }}">Edit</a>
-                                    <form class="inline" method="POST" action="{{ route('admin.categories.destroy', $category) }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="text-rose-600" type="submit" onclick="return confirm('Delete this category?')">Delete</button>
-                                    </form>
+                                <td class="py-4">
+                                    <div class="flex items-center gap-2">
+                                        <a
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-100 text-emerald-700 hover:bg-emerald-50"
+                                            href="{{ route('admin.products.create', ['category_id' => $category->id]) }}"
+                                            title="Add product"
+                                            aria-label="Add product in {{ $category->name }}"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M10 3.25a.75.75 0 0 1 .75.75v5.25H16a.75.75 0 0 1 0 1.5h-5.25V16a.75.75 0 0 1-1.5 0v-5.25H4a.75.75 0 0 1 0-1.5h5.25V4a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                                            </svg>
+                                            <span class="sr-only">Add product</span>
+                                        </a>
+                                        <a
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-100 text-emerald-700 hover:bg-emerald-50"
+                                            href="{{ route('admin.categories.edit', $category) }}"
+                                            title="Edit category"
+                                            aria-label="Edit {{ $category->name }}"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path d="M17.414 2.586a2 2 0 0 0-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 0 0 0-2.828Z" />
+                                                <path fill-rule="evenodd" d="M2 15.25A2.75 2.75 0 0 1 4.75 12.5H6v2.25A2.75 2.75 0 0 1 3.25 17.5H2v-2.25Z" clip-rule="evenodd" />
+                                            </svg>
+                                            <span class="sr-only">Edit</span>
+                                        </a>
+                                        <form class="inline-flex" method="POST" action="{{ route('admin.categories.destroy', $category) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button
+                                                class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-rose-100 text-rose-600 hover:bg-rose-50"
+                                                type="submit"
+                                                onclick="return confirm('Delete this category?')"
+                                                title="Delete category"
+                                                aria-label="Delete {{ $category->name }}"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                    <path fill-rule="evenodd" d="M8.75 2.5a.75.75 0 0 0-.75.75V4h4V3.25a.75.75 0 0 0-.75-.75h-2.5ZM13.5 4V3.25A2.25 2.25 0 0 0 11.25 1h-2.5A2.25 2.25 0 0 0 6.5 3.25V4H4.75a.75.75 0 0 0 0 1.5h.438l.652 10.427A2.25 2.25 0 0 0 8.086 18h3.828a2.25 2.25 0 0 0 2.246-2.073L14.812 5.5h.438a.75.75 0 0 0 0-1.5H13.5Zm-4.75 4a.75.75 0 0 1 .75.75v5a.75.75 0 0 1-1.5 0v-5A.75.75 0 0 1 8.75 8Zm3.25.75a.75.75 0 0 0-1.5 0v5a.75.75 0 0 0 1.5 0v-5Z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="sr-only">Delete</span>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

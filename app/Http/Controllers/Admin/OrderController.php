@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderStatusUpdatedMail;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -29,7 +31,9 @@ class OrderController extends Controller
             'status' => ['required', 'string', 'max:50'],
         ]);
 
-        if ($order->status !== $data['status']) {
+        $previousStatus = $order->status;
+
+        if ($previousStatus !== $data['status']) {
             $order->statusHistory()->create([
                 'status' => $data['status'],
                 'changed_by' => $request->user()->id,
@@ -37,6 +41,11 @@ class OrderController extends Controller
         }
 
         $order->update($data);
+
+        if ($previousStatus !== $data['status']) {
+            $order->loadMissing('user');
+            Mail::to($order->user->email)->send(new OrderStatusUpdatedMail($order, $previousStatus, $data['status']));
+        }
 
         return redirect()->route('admin.orders.show', $order)->with('status', 'Order updated.');
     }

@@ -25,11 +25,14 @@ class ProductController extends Controller
     {
         $categories = Category::orderBy('name')->get();
         $farmers = Farmer::orderBy('name')->get();
-        $selectedCategoryId = $request->input('category_id');
-
-        if (!$selectedCategoryId || !$categories->contains('id', (int) $selectedCategoryId)) {
-            return redirect()->route('admin.categories.index')->with('status', 'Select a category to add a product.');
+        if ($categories->isEmpty()) {
+            return redirect()->route('admin.categories.create')->with('status', 'Create a category before adding products.');
         }
+
+        $requestedCategoryId = (int) $request->input('category_id');
+        $selectedCategoryId = $categories->contains('id', $requestedCategoryId)
+            ? $requestedCategoryId
+            : (int) $categories->first()->id;
 
         return view('admin.products.create', compact('categories', 'farmers', 'selectedCategoryId'));
     }
@@ -39,7 +42,7 @@ class ProductController extends Controller
         $data = $this->validateProduct($request);
         $data['weight'] = $this->normalizeWeightOptions($request);
         unset($data['weight_options']);
-        $data['slug'] = Str::slug($data['name']);
+        $data['slug'] = $this->uniqueSlug($data['name']);
         $data['is_active'] = $request->boolean('is_active');
         $data['is_featured'] = $request->boolean('is_featured');
         $this->handleImageUpload($request, $data);
@@ -64,7 +67,7 @@ class ProductController extends Controller
         $data = $this->validateProduct($request);
         $data['weight'] = $this->normalizeWeightOptions($request);
         unset($data['weight_options']);
-        $data['slug'] = Str::slug($data['name']);
+        $data['slug'] = $this->uniqueSlug($data['name'], $product->id);
         $data['is_active'] = $request->boolean('is_active');
         $data['is_featured'] = $request->boolean('is_featured');
         $this->handleImageUpload($request, $data, $product);
@@ -192,5 +195,28 @@ class ProductController extends Controller
 
         $old = Str::startsWith($old, 'storage/') ? Str::after($old, 'storage/') : $old;
         Storage::disk('public')->delete($old);
+    }
+
+    private function uniqueSlug(string $name, ?int $ignoreProductId = null): string
+    {
+        $baseSlug = Str::slug($name);
+        if ($baseSlug === '') {
+            $baseSlug = 'product';
+        }
+
+        $candidate = $baseSlug;
+        $suffix = 2;
+
+        while (
+            Product::query()
+                ->when($ignoreProductId, fn ($query) => $query->whereKeyNot($ignoreProductId))
+                ->where('slug', $candidate)
+                ->exists()
+        ) {
+            $candidate = $baseSlug.'-'.$suffix;
+            $suffix++;
+        }
+
+        return $candidate;
     }
 }

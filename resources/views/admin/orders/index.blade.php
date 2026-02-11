@@ -29,7 +29,17 @@
                                 <td class="py-3">INR {{ number_format($order->total, 2) }}</td>
                                 <td class="py-3">{{ $order->created_at->format('M d, Y') }}</td>
                                 <td class="py-3">
-                                    <a class="text-emerald-700" href="{{ route('admin.orders.show', $order) }}">View</a>
+                                    <a
+                                        class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-100 text-emerald-700 hover:bg-emerald-50"
+                                        href="{{ route('admin.orders.show', $order) }}"
+                                        title="View order"
+                                        aria-label="View order #{{ $order->id }}"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M1.173 10a13.133 13.133 0 0 1 1.66-2.043C4.12 6.668 6.07 5.5 8.5 5.5c2.43 0 4.38 1.168 5.667 2.457A13.133 13.133 0 0 1 15.827 10a13.133 13.133 0 0 1-1.66 2.043C12.88 13.332 10.93 14.5 8.5 14.5c-2.43 0-4.38-1.168-5.667-2.457A13.133 13.133 0 0 1 1.173 10ZM8.5 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+                                        </svg>
+                                        <span class="sr-only">View</span>
+                                    </a>
                                 </td>
                             </tr>
                         @empty
