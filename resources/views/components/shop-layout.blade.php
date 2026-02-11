@@ -40,9 +40,9 @@
                             <a class="hover:text-emerald-600" href="{{ route('offers.index') }}">Latest Offer</a>
                             <a class="hover:text-emerald-600" href="{{ route('gift-boxes.index') }}">Gift Boxes</a>
                             <a class="hover:text-emerald-600" href="{{ route('blog.index') }}">Blog</a>
-                            <a class="hover:text-emerald-600" href="{{ route('corporate-gifts.index') }}">Corporate Gift Boxes</a>
                             <a class="hover:text-emerald-600" href="{{ route('cart.index') }}">Cart ({{ $cartCount }})</a>
                             @auth
+                                <a class="hover:text-emerald-600" href="{{ route('profile.edit') }}">Profile</a>
                                 <a class="hover:text-emerald-600" href="{{ route('dashboard') }}">My Orders</a>
                                 @if(auth()->user()->isAdmin())
                                     <a class="hover:text-emerald-600" href="{{ route('admin.dashboard') }}">Admin</a>
@@ -55,6 +55,7 @@
                                 <a class="text-emerald-700 hover:text-emerald-600" href="{{ route('login') }}">Login</a>
                                 <a class="rounded-full bg-emerald-600 px-4 py-2 text-white shadow-sm hover:bg-emerald-500" href="{{ route('register') }}">Create account</a>
                             @else
+                                <a class="text-emerald-700 hover:text-emerald-600" href="{{ route('profile.edit') }}">Profile</a>
                                 <span class="hidden sm:inline text-gray-600">Hi, {{ auth()->user()->name }}</span>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
@@ -71,7 +72,9 @@
                         <a class="hover:text-emerald-600" href="{{ route('offers.index') }}">Offers</a>
                         <a class="hover:text-emerald-600" href="{{ route('gift-boxes.index') }}">Gift Boxes</a>
                         <a class="hover:text-emerald-600" href="{{ route('blog.index') }}">Blog</a>
-                        <a class="hover:text-emerald-600" href="{{ route('corporate-gifts.index') }}">Corporate</a>
+                        @auth
+                            <a class="hover:text-emerald-600" href="{{ route('profile.edit') }}">Profile</a>
+                        @endauth
                     </div>
                 </div>
             </header>
