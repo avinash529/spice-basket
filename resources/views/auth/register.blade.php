@@ -27,7 +27,20 @@
                     <a class="text-sm font-medium text-emerald-700 hover:text-emerald-600" href="{{ route('login') }}">Already registered?</a>
                 </div>
 
-                <form method="POST" action="{{ route('register') }}" class="mt-8 space-y-5">
+                <div class="mt-8">
+                    @include('auth.partials.firebase-google-auth', [
+                        'buttonText' => 'Sign up with Google',
+                        'context' => 'register',
+                    ])
+                </div>
+
+                <div class="my-6 flex items-center gap-3">
+                    <span class="h-px flex-1 bg-stone-200"></span>
+                    <span class="text-xs uppercase tracking-[0.2em] text-stone-400">or register with email</span>
+                    <span class="h-px flex-1 bg-stone-200"></span>
+                </div>
+
+                <form method="POST" action="{{ route('register') }}" class="space-y-5">
                     @csrf
 
                     <div>

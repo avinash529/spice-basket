@@ -29,7 +29,20 @@
 
                 <x-auth-session-status class="mt-5" :status="session('status')" />
 
-                <form method="POST" action="{{ route('login') }}" class="mt-8 space-y-5">
+                <div class="mt-8">
+                    @include('auth.partials.firebase-google-auth', [
+                        'buttonText' => 'Continue with Google',
+                        'context' => 'login',
+                    ])
+                </div>
+
+                <div class="my-6 flex items-center gap-3">
+                    <span class="h-px flex-1 bg-stone-200"></span>
+                    <span class="text-xs uppercase tracking-[0.2em] text-stone-400">or</span>
+                    <span class="h-px flex-1 bg-stone-200"></span>
+                </div>
+
+                <form method="POST" action="{{ route('login') }}" class="space-y-5">
                     @csrf
 
                     <div>
