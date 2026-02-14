@@ -18,6 +18,7 @@ class ShopController extends Controller
 
         $offerProducts = Product::query()
             ->where('is_active', true)
+            ->withActiveOffers()
             ->orderByDesc('is_featured')
             ->orderByDesc('updated_at')
             ->take(4)

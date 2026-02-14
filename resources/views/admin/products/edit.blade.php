@@ -36,6 +36,7 @@
                         <input class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" type="text" name="unit" value="{{ old('unit', $product->unit) }}" required />
                     </div>
                 </div>
+                @include('admin.products.partials.offer-fields', ['product' => $product])
                 @include('admin.products.partials.weight-options', ['product' => $product])
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>

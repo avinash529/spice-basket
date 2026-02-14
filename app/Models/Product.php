@@ -2,17 +2,29 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
+    public const OFFER_MODE_NONE = 'none';
+    public const OFFER_MODE_NORMAL = 'normal';
+    public const OFFER_MODE_VISHU = 'vishu';
+    public const OFFER_MODE_ONAM = 'onam';
+    public const OFFER_MODE_CHRISTMAS = 'christmas';
+
     protected $fillable = [
         'name',
         'slug',
         'description',
         'price',
+        'offer_mode',
+        'normal_offer_percent',
+        'vishu_offer_percent',
+        'onam_offer_percent',
+        'christmas_offer_percent',
         'weight',
         'image',
         'is_featured',
@@ -25,6 +37,49 @@ class Product extends Model
         'image_url',
         'is_active',
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    public static function offerModeLabels(): array
+    {
+        return [
+            self::OFFER_MODE_NONE => 'No Offer',
+            self::OFFER_MODE_NORMAL => 'Normal Offer',
+            self::OFFER_MODE_VISHU => 'Vishu Offer',
+            self::OFFER_MODE_ONAM => 'Onam Offer',
+            self::OFFER_MODE_CHRISTMAS => 'Christmas Offer',
+        ];
+    }
+
+    public function scopeWithActiveOffers(Builder $query): Builder
+    {
+        return $query
+            ->where('offer_mode', '!=', self::OFFER_MODE_NONE)
+            ->where(function (Builder $builder) {
+                $builder
+                    ->where(function (Builder $modeQuery) {
+                        $modeQuery
+                            ->where('offer_mode', self::OFFER_MODE_NORMAL)
+                            ->where('normal_offer_percent', '>', 0);
+                    })
+                    ->orWhere(function (Builder $modeQuery) {
+                        $modeQuery
+                            ->where('offer_mode', self::OFFER_MODE_VISHU)
+                            ->where('vishu_offer_percent', '>', 0);
+                    })
+                    ->orWhere(function (Builder $modeQuery) {
+                        $modeQuery
+                            ->where('offer_mode', self::OFFER_MODE_ONAM)
+                            ->where('onam_offer_percent', '>', 0);
+                    })
+                    ->orWhere(function (Builder $modeQuery) {
+                        $modeQuery
+                            ->where('offer_mode', self::OFFER_MODE_CHRISTMAS)
+                            ->where('christmas_offer_percent', '>', 0);
+                    });
+            });
+    }
 
     public function category(): BelongsTo
     {
@@ -93,9 +148,73 @@ class Product extends Model
 
     public function priceForWeight(string $weight): float
     {
+        return $this->discountedPrice($this->basePriceForWeight($weight));
+    }
+
+    public function basePriceForWeight(string $weight): float
+    {
         $map = $this->weightPriceMap();
 
         return $map[$weight] ?? (float) $this->price;
+    }
+
+    public function displayPrice(): float
+    {
+        return $this->priceForWeight((string) $this->unit);
+    }
+
+    public function activeOfferPercent(): float
+    {
+        return $this->offerPercentFor((string) $this->offer_mode);
+    }
+
+    public function hasActiveOffer(): bool
+    {
+        return $this->activeOfferPercent() > 0;
+    }
+
+    public function activeOfferLabel(): ?string
+    {
+        if (! $this->hasActiveOffer()) {
+            return null;
+        }
+
+        return self::offerModeLabels()[(string) $this->offer_mode] ?? null;
+    }
+
+    public function offerPercentFor(string $mode): float
+    {
+        $fieldByMode = [
+            self::OFFER_MODE_NORMAL => 'normal_offer_percent',
+            self::OFFER_MODE_VISHU => 'vishu_offer_percent',
+            self::OFFER_MODE_ONAM => 'onam_offer_percent',
+            self::OFFER_MODE_CHRISTMAS => 'christmas_offer_percent',
+        ];
+
+        if (! isset($fieldByMode[$mode])) {
+            return 0.0;
+        }
+
+        $value = $this->{$fieldByMode[$mode]};
+        if (! is_numeric($value)) {
+            return 0.0;
+        }
+
+        return max(0.0, min((float) $value, 100.0));
+    }
+
+    public function discountedPrice(float $price): float
+    {
+        $base = max($price, 0.0);
+        $percent = $this->activeOfferPercent();
+
+        if ($percent <= 0) {
+            return round($base, 2);
+        }
+
+        $discounted = $base - (($base * $percent) / 100);
+
+        return round(max($discounted, 0.0), 2);
     }
 
     /**

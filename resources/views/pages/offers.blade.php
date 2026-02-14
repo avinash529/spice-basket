@@ -47,13 +47,18 @@
                     <div class="relative overflow-hidden rounded-2xl">
                         <img src="{{ $cardImage }}" alt="{{ $product->name }}" class="h-40 w-full object-cover transition duration-500 group-hover:scale-105" />
                         <span class="absolute left-3 top-3 rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">
-                            {{ $product->is_featured ? 'Featured Deal' : 'Limited Offer' }}
+                            {{ $product->activeOfferLabel() ?? ($product->is_featured ? 'Featured Deal' : 'Limited Offer') }}
                         </span>
                     </div>
                     <h2 class="mt-4 font-semibold">{{ $product->name }}</h2>
                     <p class="mt-1 text-sm text-stone-600">{{ $product->category?->name ?? 'Spices' }}</p>
                     <div class="mt-3 flex items-center justify-between">
-                        <p class="font-semibold">INR {{ number_format($product->price, 2) }}</p>
+                        <p class="font-semibold">
+                            INR {{ number_format($product->displayPrice(), 2) }}
+                            @if($product->hasActiveOffer())
+                                <span class="ml-2 text-xs font-normal text-stone-400 line-through">INR {{ number_format((float) $product->price, 2) }}</span>
+                            @endif
+                        </p>
                         <span class="text-sm text-emerald-700">View</span>
                     </div>
                 </a>
@@ -69,4 +74,3 @@
         </div>
     </section>
 </x-shop-layout>
-

@@ -42,16 +42,34 @@
                             } else {
                                 $cardImage = asset('images/turmeric.png');
                             }
+                            $listBasePrice = $product->basePriceForWeight((string) $product->unit);
+                            $listDisplayPrice = $product->discountedPrice($listBasePrice);
+                            $offerPercentText = rtrim(rtrim(number_format($product->activeOfferPercent(), 2), '0'), '.');
                         @endphp
                         <a href="{{ route('products.show', $product->slug) }}" class="group block rounded-3xl border border-stone-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300">
                             <div class="relative overflow-hidden rounded-2xl">
                                 <img src="{{ $cardImage }}" alt="{{ $product->name }}" class="h-44 w-full object-cover transition duration-500 group-hover:scale-105" />
                                 <div class="absolute top-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-stone-700">{{ $product->origin ?? 'Single origin' }}</div>
+                                @if($product->hasActiveOffer())
+                                    <div class="absolute top-4 right-4 rounded-full bg-rose-600 px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                                        {{ $offerPercentText }}% OFF
+                                    </div>
+                                @endif
                             </div>
                             <h3 class="mt-4 font-semibold text-lg">{{ $product->name }}</h3>
+                            @if($product->hasActiveOffer())
+                                <p class="mt-1 inline-flex items-center rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700">
+                                    {{ $product->activeOfferLabel() }}
+                                </p>
+                            @endif
                             <p class="mt-2 text-sm text-stone-600">{{ $product->unit }}</p>
                             <div class="mt-4 flex items-center justify-between">
-                                <span class="font-semibold">INR {{ number_format($product->price, 2) }}</span>
+                                <span class="font-semibold">
+                                    INR {{ number_format($listDisplayPrice, 2) }}
+                                    @if($product->hasActiveOffer())
+                                        <span class="ml-2 text-xs font-normal text-stone-400 line-through">INR {{ number_format($listBasePrice, 2) }}</span>
+                                    @endif
+                                </span>
                                 <span class="text-emerald-700 group-hover:text-emerald-600">View</span>
                             </div>
                         </a>

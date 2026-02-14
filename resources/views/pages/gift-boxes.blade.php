@@ -50,7 +50,12 @@
                     </div>
                     <h2 class="mt-4 font-semibold">{{ $product->name }}</h2>
                     <p class="mt-1 text-sm text-stone-600">{{ $product->category?->name ?? 'Gift Collection' }}</p>
-                    <p class="mt-3 font-semibold">INR {{ number_format($product->price, 2) }}</p>
+                    <p class="mt-3 font-semibold">
+                        INR {{ number_format($product->displayPrice(), 2) }}
+                        @if($product->hasActiveOffer())
+                            <span class="ml-2 text-xs font-normal text-stone-400 line-through">INR {{ number_format((float) $product->price, 2) }}</span>
+                        @endif
+                    </p>
                 </a>
             @empty
                 <div class="rounded-3xl border border-dashed border-stone-300 bg-white p-8 text-stone-600 sm:col-span-2 lg:col-span-4">
@@ -64,4 +69,3 @@
         </div>
     </section>
 </x-shop-layout>
-

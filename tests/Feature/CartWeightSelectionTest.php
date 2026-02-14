@@ -129,6 +129,26 @@ class CartWeightSelectionTest extends TestCase
         });
     }
 
+    public function test_active_offer_discount_is_applied_to_selected_weight_price(): void
+    {
+        $product = $this->createProduct('100g=120,250g=280', 120, [
+            'offer_mode' => 'onam',
+            'onam_offer_percent' => 10,
+        ]);
+
+        $response = $this->post(route('cart.add', $product), [
+            'quantity' => 1,
+            'selected_weight' => '250g',
+        ]);
+
+        $response->assertRedirect(route('cart.index'));
+        $response->assertSessionHas('cart', function (array $cart): bool {
+            $line = collect($cart)->first();
+
+            return (float) ($line['price'] ?? 0) === 252.0;
+        });
+    }
+
     public function test_cart_page_refreshes_price_when_product_rate_changes(): void
     {
         $product = $this->createProduct('100g', 120);
@@ -161,9 +181,9 @@ class CartWeightSelectionTest extends TestCase
         });
     }
 
-    private function createProduct(?string $weight, float $price = 120): Product
+    private function createProduct(?string $weight, float $price = 120, array $overrides = []): Product
     {
-        return Product::create([
+        return Product::create(array_merge([
             'name' => 'Test Spice',
             'slug' => 'test-spice-'.uniqid(),
             'price' => $price,
@@ -171,6 +191,6 @@ class CartWeightSelectionTest extends TestCase
             'stock_qty' => 50,
             'weight' => $weight,
             'is_active' => true,
-        ]);
+        ], $overrides));
     }
 }

@@ -102,7 +102,12 @@
                     <h3 class="mt-4 font-semibold text-lg">{{ $product->name }}</h3>
                     <p class="mt-2 text-sm text-stone-600">{{ $product->unit }}</p>
                     <div class="mt-4 flex items-center justify-between">
-                        <span class="font-semibold">INR {{ number_format($product->price, 2) }}</span>
+                        <span class="font-semibold">
+                            INR {{ number_format($product->displayPrice(), 2) }}
+                            @if($product->hasActiveOffer())
+                                <span class="ml-2 text-xs font-normal text-stone-400 line-through">INR {{ number_format((float) $product->price, 2) }}</span>
+                            @endif
+                        </span>
                         <span class="text-emerald-700 group-hover:text-emerald-600">View</span>
                     </div>
                 </a>
@@ -140,11 +145,18 @@
                     <a href="{{ route('products.show', $product->slug) }}" class="group rounded-3xl border border-stone-100 bg-white p-4 shadow-sm hover:-translate-y-1 hover:shadow-md transition">
                         <div class="relative overflow-hidden rounded-2xl">
                             <img src="{{ $offerImage }}" alt="{{ $product->name }}" class="h-36 w-full object-cover transition duration-500 group-hover:scale-105" />
-                            <span class="absolute left-3 top-3 rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">Hot deal</span>
+                            <span class="absolute left-3 top-3 rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">
+                                {{ $product->activeOfferLabel() ?? 'Hot deal' }}
+                            </span>
                         </div>
                         <p class="mt-4 font-semibold">{{ $product->name }}</p>
                         <p class="mt-1 text-sm text-stone-600">{{ $product->unit }}</p>
-                        <p class="mt-2 font-semibold">INR {{ number_format($product->price, 2) }}</p>
+                        <p class="mt-2 font-semibold">
+                            INR {{ number_format($product->displayPrice(), 2) }}
+                            @if($product->hasActiveOffer())
+                                <span class="ml-2 text-xs font-normal text-stone-400 line-through">INR {{ number_format((float) $product->price, 2) }}</span>
+                            @endif
+                        </p>
                     </a>
                 @empty
                     <p class="text-stone-600">No active offers right now.</p>

@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -45,6 +46,7 @@ class ProductController extends Controller
         $data['slug'] = $this->uniqueSlug($data['name']);
         $data['is_active'] = $request->boolean('is_active');
         $data['is_featured'] = $request->boolean('is_featured');
+        $this->normalizeOfferFields($data, $request);
         $this->handleImageUpload($request, $data);
 
         Product::create($data);
@@ -70,6 +72,7 @@ class ProductController extends Controller
         $data['slug'] = $this->uniqueSlug($data['name'], $product->id);
         $data['is_active'] = $request->boolean('is_active');
         $data['is_featured'] = $request->boolean('is_featured');
+        $this->normalizeOfferFields($data, $request);
         $this->handleImageUpload($request, $data, $product);
 
         $product->update($data);
@@ -124,6 +127,11 @@ class ProductController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
+            'offer_mode' => ['nullable', 'string', Rule::in(array_keys(Product::offerModeLabels()))],
+            'normal_offer_percent' => ['nullable', 'numeric', 'min:0', 'max:100', 'required_if:offer_mode,normal'],
+            'vishu_offer_percent' => ['nullable', 'numeric', 'min:0', 'max:100', 'required_if:offer_mode,vishu'],
+            'onam_offer_percent' => ['nullable', 'numeric', 'min:0', 'max:100', 'required_if:offer_mode,onam'],
+            'christmas_offer_percent' => ['nullable', 'numeric', 'min:0', 'max:100', 'required_if:offer_mode,christmas'],
             'weight_options' => ['nullable', 'array'],
             'weight_options.*.label' => ['nullable', 'string', 'max:50'],
             'weight_options.*.price' => ['nullable', 'numeric', 'min:0'],
@@ -173,6 +181,18 @@ class ProductController extends Controller
         }
 
         return json_encode($normalized, JSON_UNESCAPED_UNICODE);
+    }
+
+    private function normalizeOfferFields(array &$data, Request $request): void
+    {
+        $validModes = array_keys(Product::offerModeLabels());
+        $mode = (string) $request->input('offer_mode', Product::OFFER_MODE_NONE);
+        $data['offer_mode'] = in_array($mode, $validModes, true) ? $mode : Product::OFFER_MODE_NONE;
+
+        foreach (['normal_offer_percent', 'vishu_offer_percent', 'onam_offer_percent', 'christmas_offer_percent'] as $field) {
+            $value = $request->input($field);
+            $data[$field] = ($value === null || $value === '') ? null : round((float) $value, 2);
+        }
     }
 
     private function handleImageUpload(Request $request, array &$data, ?Product $product = null): void

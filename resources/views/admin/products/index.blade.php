@@ -24,6 +24,7 @@
                             <th class="py-2">Name</th>
                             <th class="py-2">Category</th>
                             <th class="py-2">Price</th>
+                            <th class="py-2">Offer</th>
                             <th class="py-2">Stock</th>
                             <th class="py-2">Status</th>
                             <th class="py-2">Actions</th>
@@ -35,6 +36,15 @@
                                 <td class="py-4 font-semibold">{{ $product->name }}</td>
                                 <td class="py-4">{{ $product->category?->name ?? 'General' }}</td>
                                 <td class="py-4">INR {{ number_format($product->price, 2) }}</td>
+                                <td class="py-4">
+                                    @if($product->hasActiveOffer())
+                                        <span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                                            {{ $product->activeOfferLabel() }} · {{ rtrim(rtrim(number_format($product->activeOfferPercent(), 2), '0'), '.') }}%
+                                        </span>
+                                    @else
+                                        <span class="text-stone-400">-</span>
+                                    @endif
+                                </td>
                                 <td class="py-4">{{ $product->stock_qty }}</td>
                                 <td class="py-4">
                                     <span class="rounded-full px-3 py-1 text-xs font-semibold {{ $product->is_active ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-stone-600' }}">
@@ -76,7 +86,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td class="py-6 text-stone-500" colspan="6">No products yet.</td>
+                                <td class="py-6 text-stone-500" colspan="7">No products yet.</td>
                             </tr>
                         @endforelse
                     </tbody>

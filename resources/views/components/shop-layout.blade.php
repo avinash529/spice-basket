@@ -99,7 +99,7 @@
                                         <a href="{{ route('profile.edit') }}" class="block rounded-xl px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Profile</a>
                                         <a href="{{ route('dashboard') }}" class="block rounded-xl px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">My Orders</a>
                                         @if(auth()->user()->isAdmin())
-                                            <a href="{{ route('admin.dashboard') }}" class="block rounded-xl px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Admin</a>
+                                            <a href="{{ route('admin.dashboard') }}" class="block rounded-xl px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Admin Dashboard</a>
                                         @endif
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
@@ -135,7 +135,7 @@
                                 <a href="{{ route('profile.edit') }}" class="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Profile</a>
                                 <a href="{{ route('dashboard') }}" class="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">My Orders</a>
                                 @if(auth()->user()->isAdmin())
-                                    <a href="{{ route('admin.dashboard') }}" class="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Admin</a>
+                                    <a href="{{ route('admin.dashboard') }}" class="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Admin Dashboard</a>
                                 @endif
                             @else
                                 <a href="{{ route('login') }}" class="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Login</a>

@@ -51,6 +51,7 @@ class PageController extends Controller
     {
         $query = Product::query()
             ->where('is_active', true)
+            ->withActiveOffers()
             ->with('category')
             ->orderByDesc('is_featured')
             ->orderByDesc('updated_at');
@@ -210,4 +211,3 @@ class PageController extends Controller
             });
     }
 }
-

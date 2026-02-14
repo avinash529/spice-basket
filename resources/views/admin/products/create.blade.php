@@ -44,6 +44,7 @@
                         @error('unit')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
                     </div>
                 </div>
+                @include('admin.products.partials.offer-fields')
 
                 @include('admin.products.partials.weight-options')
 

@@ -84,6 +84,42 @@ class AdminProductFlowTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_store_festival_offer_configuration_for_product(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+        $category = $this->createCategory('Festive Spices');
+
+        $response = $this
+            ->actingAs($admin)
+            ->post(route('admin.products.store'), [
+                'name' => 'Onam Pepper Mix',
+                'description' => 'Seasonal special blend',
+                'price' => '350',
+                'unit' => '250g',
+                'stock_qty' => 20,
+                'origin' => 'Kerala',
+                'category_id' => $category->id,
+                'offer_mode' => 'onam',
+                'normal_offer_percent' => '5',
+                'vishu_offer_percent' => '8',
+                'onam_offer_percent' => '15',
+                'christmas_offer_percent' => '12',
+                'is_active' => 1,
+            ]);
+
+        $response->assertRedirect(route('admin.products.index'));
+        $this->assertDatabaseHas('products', [
+            'name' => 'Onam Pepper Mix',
+            'offer_mode' => 'onam',
+            'normal_offer_percent' => 5,
+            'vishu_offer_percent' => 8,
+            'onam_offer_percent' => 15,
+            'christmas_offer_percent' => 12,
+        ]);
+    }
+
     private function createCategory(string $name): Category
     {
         return Category::create([
