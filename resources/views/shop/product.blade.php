@@ -70,8 +70,21 @@
                     @else
                         <input type="hidden" name="selected_weight" value="{{ $product->unit }}" />
                     @endif
-                    <input type="number" min="1" name="quantity" value="1" class="w-24 rounded-xl border-gray-200" />
-                    <button class="rounded-full bg-emerald-600 px-6 py-3 text-white hover:bg-emerald-500" type="submit">Add to cart</button>
+                    <input
+                        type="number"
+                        min="1"
+                        max="{{ max((int) $product->stock_qty, 1) }}"
+                        name="quantity"
+                        value="1"
+                        class="w-24 rounded-xl border-gray-200"
+                    />
+                    <button
+                        class="rounded-full bg-emerald-600 px-6 py-3 text-white hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-stone-300"
+                        type="submit"
+                        @disabled((int) $product->stock_qty <= 0)
+                    >
+                        {{ (int) $product->stock_qty > 0 ? 'Add to cart' : 'Out of stock' }}
+                    </button>
                 </form>
                 @if(!empty($weightOptions))
                     <script>

@@ -29,6 +29,10 @@ class CartController extends Controller
             return redirect()->route('products.index')->with('status', 'This product is not available.');
         }
 
+        if ((int) $product->stock_qty <= 0) {
+            return redirect()->route('cart.index')->with('status', 'This product is currently out of stock.');
+        }
+
         $weightOptions = $product->weightOptions();
         $rules = [
             'quantity' => ['nullable', 'integer', 'min:1'],
@@ -41,18 +45,27 @@ class CartController extends Controller
 
         $validated = $request->validate($rules);
 
-        $quantity = (int) ($validated['quantity'] ?? 1);
+        $requestedQuantity = (int) ($validated['quantity'] ?? 1);
         $selectedWeight = trim((string) ($validated['selected_weight'] ?? $product->unit));
         if ($selectedWeight === '') {
             $selectedWeight = 'unit';
         }
         $selectedPrice = $product->priceForWeight($selectedWeight);
         $lineKey = $this->lineKey($product->id, $selectedWeight);
-        $cart = $this->syncCart($request)['cart'];
+        $syncResult = $this->syncCart($request);
+        $cart = $syncResult['cart'];
+
+        $availableToAdd = max((int) $product->stock_qty - $this->totalProductQuantityInCart($cart, $product->id), 0);
+        if ($availableToAdd <= 0) {
+            return redirect()->route('cart.index')->with('status', 'No more stock is available for this product.');
+        }
+
+        $quantity = min($requestedQuantity, $availableToAdd);
 
         if (isset($cart[$lineKey])) {
             $cart[$lineKey]['quantity'] += $quantity;
             $cart[$lineKey]['price'] = $selectedPrice;
+            $cart[$lineKey]['stock_qty'] = (int) $product->stock_qty;
         } else {
             $cart[$lineKey] = [
                 'key' => $lineKey,
@@ -62,12 +75,17 @@ class CartController extends Controller
                 'unit' => $selectedWeight,
                 'image_url' => $product->image_url,
                 'quantity' => $quantity,
+                'stock_qty' => (int) $product->stock_qty,
             ];
         }
 
         $this->storeCart($request, $cart);
 
-        return redirect()->route('cart.index')->with('status', 'Item added to cart.');
+        $status = $quantity < $requestedQuantity
+            ? 'Only '.$quantity.' unit(s) were added due to limited stock.'
+            : 'Item added to cart.';
+
+        return redirect()->route('cart.index')->with('status', $status);
     }
 
     public function update(Request $request): RedirectResponse
@@ -86,8 +104,18 @@ class CartController extends Controller
         }
 
         $this->storeCart($request, $cart);
+        $syncResult = $this->syncCart($request);
 
-        return redirect()->route('cart.index')->with('status', 'Cart updated.');
+        $status = 'Cart updated.';
+        if ($syncResult['item_removed'] && $syncResult['stock_adjusted']) {
+            $status = 'Cart updated. Some items were removed because stock is unavailable.';
+        } elseif ($syncResult['stock_adjusted']) {
+            $status = 'Cart updated. Quantities were adjusted to match available stock.';
+        } elseif ($syncResult['item_removed']) {
+            $status = 'Cart updated. Some unavailable items were removed.';
+        }
+
+        return redirect()->route('cart.index')->with('status', $status);
     }
 
     public function remove(Request $request, Product $product): RedirectResponse
@@ -147,7 +175,8 @@ class CartController extends Controller
      *     changed: bool,
      *     price_changed: bool,
      *     item_removed: bool,
-     *     unit_adjusted: bool
+     *     unit_adjusted: bool,
+     *     stock_adjusted: bool
      * }
      */
     private function syncCart(Request $request): array
@@ -165,7 +194,8 @@ class CartController extends Controller
      * @param array{
      *     price_changed: bool,
      *     item_removed: bool,
-     *     unit_adjusted: bool
+     *     unit_adjusted: bool,
+     *     stock_adjusted: bool
      * } $syncResult
      * @return list<string>
      */
@@ -181,10 +211,29 @@ class CartController extends Controller
             $notices[] = 'Some cart units were adjusted based on current product options.';
         }
 
+        if ($syncResult['stock_adjusted']) {
+            $notices[] = 'Some cart quantities were adjusted to available stock.';
+        }
+
         if ($syncResult['item_removed']) {
             $notices[] = 'Unavailable items were removed from your cart.';
         }
 
         return $notices;
+    }
+
+    private function totalProductQuantityInCart(array $cart, int $productId): int
+    {
+        $total = 0;
+
+        foreach ($cart as $item) {
+            if ((int) ($item['id'] ?? 0) !== $productId) {
+                continue;
+            }
+
+            $total += max((int) ($item['quantity'] ?? 0), 0);
+        }
+
+        return $total;
     }
 }

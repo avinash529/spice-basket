@@ -33,7 +33,7 @@
                                 <p class="text-sm text-gray-600">{{ $item['unit'] }}</p>
                             </div>
                             <div class="flex items-center gap-4">
-                                <input type="number" min="1" name="items[{{ $item['key'] }}]" value="{{ $item['quantity'] }}" class="w-24 rounded-xl border-gray-200" />
+                                <input type="number" min="1" max="{{ max((int) ($item['stock_qty'] ?? 1), 1) }}" name="items[{{ $item['key'] }}]" value="{{ $item['quantity'] }}" class="w-24 rounded-xl border-gray-200" />
                                 <span class="font-semibold">INR {{ number_format($item['price'] * $item['quantity'], 2) }}</span>
                                 <button class="text-rose-600" type="submit" name="line_key" value="{{ $item['key'] }}" formaction="{{ route('cart.remove', $item['id']) }}">Remove</button>
                             </div>

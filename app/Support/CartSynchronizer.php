@@ -13,7 +13,8 @@ class CartSynchronizer
      *     changed: bool,
      *     price_changed: bool,
      *     item_removed: bool,
-     *     unit_adjusted: bool
+     *     unit_adjusted: bool,
+     *     stock_adjusted: bool
      * }
      */
     public function sync(array $cart): array
@@ -23,6 +24,9 @@ class CartSynchronizer
         $priceChanged = false;
         $itemRemoved = false;
         $unitAdjusted = false;
+        $stockAdjusted = false;
+        $remainingStockByProduct = [];
+        $productCache = [];
 
         foreach ($cart as $key => $item) {
             if (!is_array($item) || !isset($item['id'])) {
@@ -36,11 +40,20 @@ class CartSynchronizer
                 continue;
             }
 
-            $product = Product::find($productId);
+            if (!array_key_exists($productId, $productCache)) {
+                $productCache[$productId] = Product::find($productId);
+            }
+
+            $product = $productCache[$productId];
             if (! $product || ! $product->is_active) {
                 $changed = true;
                 $itemRemoved = true;
                 continue;
+            }
+
+            $availableStock = max((int) $product->stock_qty, 0);
+            if (!array_key_exists($productId, $remainingStockByProduct)) {
+                $remainingStockByProduct[$productId] = $availableStock;
             }
 
             $quantity = max((int) ($item['quantity'] ?? 1), 1);
@@ -65,9 +78,24 @@ class CartSynchronizer
                 $priceChanged = true;
             }
 
+            $allocatableQuantity = min($quantity, $remainingStockByProduct[$productId]);
+            if ($allocatableQuantity < $quantity) {
+                $changed = true;
+                $stockAdjusted = true;
+            }
+
+            if ($allocatableQuantity <= 0) {
+                $changed = true;
+                $itemRemoved = true;
+                $stockAdjusted = true;
+                continue;
+            }
+
+            $remainingStockByProduct[$productId] -= $allocatableQuantity;
+
             $lineKey = $this->lineKey($product->id, $resolvedUnit);
             if (isset($normalized[$lineKey])) {
-                $normalized[$lineKey]['quantity'] += $quantity;
+                $normalized[$lineKey]['quantity'] += $allocatableQuantity;
                 $changed = true;
                 continue;
             }
@@ -83,7 +111,8 @@ class CartSynchronizer
                 'price' => $resolvedPrice,
                 'unit' => $resolvedUnit,
                 'image_url' => $product->image_url,
-                'quantity' => $quantity,
+                'quantity' => $allocatableQuantity,
+                'stock_qty' => $availableStock,
             ];
         }
 
@@ -93,6 +122,7 @@ class CartSynchronizer
             'price_changed' => $priceChanged,
             'item_removed' => $itemRemoved,
             'unit_adjusted' => $unitAdjusted,
+            'stock_adjusted' => $stockAdjusted,
         ];
     }
 

@@ -181,6 +181,93 @@ class CartWeightSelectionTest extends TestCase
         });
     }
 
+    public function test_add_to_cart_caps_quantity_by_available_stock(): void
+    {
+        $product = $this->createProduct('100g', 120, ['stock_qty' => 5]);
+
+        $this->post(route('cart.add', $product), [
+            'quantity' => 3,
+            'selected_weight' => '100g',
+        ])->assertRedirect(route('cart.index'));
+
+        $response = $this->post(route('cart.add', $product), [
+            'quantity' => 4,
+            'selected_weight' => '100g',
+        ]);
+
+        $lineKey = $product->id.'::100g';
+        $response->assertRedirect(route('cart.index'));
+        $response->assertSessionHas('status', 'Only 2 unit(s) were added due to limited stock.');
+        $response->assertSessionHas('cart', function (array $cart) use ($lineKey): bool {
+            $line = $cart[$lineKey] ?? [];
+
+            return (int) ($line['quantity'] ?? 0) === 5;
+        });
+    }
+
+    public function test_cart_update_caps_quantity_by_available_stock(): void
+    {
+        $product = $this->createProduct('100g', 120, ['stock_qty' => 5]);
+        $lineKey = $product->id.'::100g';
+
+        $response = $this
+            ->withSession([
+                'cart' => [
+                    $lineKey => [
+                        'key' => $lineKey,
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'price' => 120,
+                        'unit' => '100g',
+                        'quantity' => 2,
+                    ],
+                ],
+            ])
+            ->post(route('cart.update'), [
+                'items' => [
+                    $lineKey => 7,
+                ],
+            ]);
+
+        $response->assertRedirect(route('cart.index'));
+        $response->assertSessionHas('status', 'Cart updated. Quantities were adjusted to match available stock.');
+        $response->assertSessionHas('cart', function (array $cart) use ($lineKey): bool {
+            $line = $cart[$lineKey] ?? [];
+
+            return (int) ($line['quantity'] ?? 0) === 5;
+        });
+    }
+
+    public function test_stock_limit_is_shared_across_weights_of_same_product(): void
+    {
+        $product = $this->createProduct('100g,250g', 120, ['stock_qty' => 5]);
+
+        $this->post(route('cart.add', $product), [
+            'quantity' => 4,
+            'selected_weight' => '100g',
+        ])->assertRedirect(route('cart.index'));
+
+        $response = $this->post(route('cart.add', $product), [
+            'quantity' => 4,
+            'selected_weight' => '250g',
+        ]);
+
+        $firstLineKey = $product->id.'::100g';
+        $secondLineKey = $product->id.'::250g';
+
+        $response->assertRedirect(route('cart.index'));
+        $response->assertSessionHas('status', 'Only 1 unit(s) were added due to limited stock.');
+        $response->assertSessionHas('cart', function (array $cart) use ($firstLineKey, $secondLineKey): bool {
+            $first = $cart[$firstLineKey] ?? [];
+            $second = $cart[$secondLineKey] ?? [];
+            $total = (int) ($first['quantity'] ?? 0) + (int) ($second['quantity'] ?? 0);
+
+            return (int) ($first['quantity'] ?? 0) === 4
+                && (int) ($second['quantity'] ?? 0) === 1
+                && $total === 5;
+        });
+    }
+
     private function createProduct(?string $weight, float $price = 120, array $overrides = []): Product
     {
         return Product::create(array_merge([

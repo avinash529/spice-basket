@@ -51,7 +51,7 @@ class CheckoutController extends Controller
             return redirect()->route('products.index')->with('status', 'Your cart is empty.');
         }
 
-        if ($syncResult['price_changed'] || $syncResult['item_removed'] || $syncResult['unit_adjusted']) {
+        if ($syncResult['price_changed'] || $syncResult['item_removed'] || $syncResult['unit_adjusted'] || $syncResult['stock_adjusted']) {
             return redirect()
                 ->route('checkout.index')
                 ->with('status', 'Cart updated with latest rates and availability. Please review before placing the order.');
@@ -169,7 +169,8 @@ class CheckoutController extends Controller
      *     changed: bool,
      *     price_changed: bool,
      *     item_removed: bool,
-     *     unit_adjusted: bool
+     *     unit_adjusted: bool,
+     *     stock_adjusted: bool
      * }
      */
     private function syncCart(Request $request): array
@@ -187,7 +188,8 @@ class CheckoutController extends Controller
      * @param array{
      *     price_changed: bool,
      *     item_removed: bool,
-     *     unit_adjusted: bool
+     *     unit_adjusted: bool,
+     *     stock_adjusted: bool
      * } $syncResult
      * @return list<string>
      */
@@ -201,6 +203,10 @@ class CheckoutController extends Controller
 
         if ($syncResult['unit_adjusted']) {
             $notices[] = 'Some cart units were adjusted based on current product options.';
+        }
+
+        if ($syncResult['stock_adjusted']) {
+            $notices[] = 'Some cart quantities were adjusted to available stock.';
         }
 
         if ($syncResult['item_removed']) {
