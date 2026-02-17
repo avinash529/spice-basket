@@ -40,6 +40,16 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        User::query()->updateOrCreate(
+            ['email' => 'wholesale@spicebasket.test'],
+            [
+                'name' => 'Demo Wholesale',
+                'password' => Hash::make('password'),
+                'phone' => '9876509012',
+                'role' => 'wholesale',
+            ]
+        );
+
         $categories = collect([
             'Whole Spices',
             'Ground Spices',

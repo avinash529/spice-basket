@@ -7,10 +7,13 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\WholesaleController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\WholesaleContentController as AdminWholesaleContentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ShopController::class, 'home'])->name('home');
@@ -49,10 +52,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::prefix('wholesale')->name('wholesale.')->middleware(['auth', 'wholesale'])->group(function () {
+    Route::get('/', [WholesaleController::class, 'index'])->name('index');
+});
+
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::resource('users', AdminUserController::class)->except(['show', 'create', 'store']);
     Route::resource('categories', AdminCategoryController::class)->except(['show']);
     Route::resource('products', AdminProductController::class)->except(['show']);
+    Route::resource('wholesale-content', AdminWholesaleContentController::class)->except(['show']);
     Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::patch('orders/{order}', [AdminOrderController::class, 'update'])->name('orders.update');

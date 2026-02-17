@@ -27,7 +27,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'role' => ['required', Rule::in(['admin', 'user'])],
+            'role' => ['required', Rule::in(['admin', 'user', 'wholesale'])],
         ]);
 
         if ($user->id === $request->user()->id && $data['role'] !== 'admin') {

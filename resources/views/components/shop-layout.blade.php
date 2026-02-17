@@ -98,6 +98,9 @@
                                     >
                                         <a href="{{ route('profile.edit') }}" class="block rounded-xl px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Profile</a>
                                         <a href="{{ route('dashboard') }}" class="block rounded-xl px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">My Orders</a>
+                                        @if(auth()->user()->isWholesale() || auth()->user()->isAdmin())
+                                            <a href="{{ route('wholesale.index') }}" class="block rounded-xl px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Wholesale</a>
+                                        @endif
                                         @if(auth()->user()->isAdmin())
                                             <a href="{{ route('admin.dashboard') }}" class="block rounded-xl px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Admin Dashboard</a>
                                         @endif
@@ -134,6 +137,9 @@
                             @auth
                                 <a href="{{ route('profile.edit') }}" class="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Profile</a>
                                 <a href="{{ route('dashboard') }}" class="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">My Orders</a>
+                                @if(auth()->user()->isWholesale() || auth()->user()->isAdmin())
+                                    <a href="{{ route('wholesale.index') }}" class="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Wholesale</a>
+                                @endif
                                 @if(auth()->user()->isAdmin())
                                     <a href="{{ route('admin.dashboard') }}" class="rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-emerald-700">Admin Dashboard</a>
                                 @endif

@@ -21,6 +21,11 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('My Orders') }}
                     </x-nav-link>
+                    @if(auth()->user()->isWholesale())
+                        <x-nav-link :href="route('wholesale.index')" :active="request()->routeIs('wholesale.*')">
+                            {{ __('Wholesale') }}
+                        </x-nav-link>
+                    @endif
                     @if(auth()->user()->isAdmin())
                         <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
                             {{ __('Admin Dashboard') }}
@@ -34,6 +39,9 @@
                 <div class="flex items-center gap-4 text-sm">
                     <span class="text-stone-500">Hi, {{ Auth::user()->name }}</span>
                     <a class="text-emerald-700 hover:text-emerald-600" href="{{ route('profile.edit') }}">Profile</a>
+                    @if(auth()->user()->isWholesale())
+                        <a class="text-emerald-700 hover:text-emerald-600" href="{{ route('wholesale.index') }}">Wholesale</a>
+                    @endif
                     @if(auth()->user()->isAdmin())
                         <a class="text-emerald-700 hover:text-emerald-600" href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
                     @endif
@@ -65,6 +73,11 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('My Orders') }}
             </x-responsive-nav-link>
+            @if(auth()->user()->isWholesale())
+                <x-responsive-nav-link :href="route('wholesale.index')" :active="request()->routeIs('wholesale.*')">
+                    {{ __('Wholesale') }}
+                </x-responsive-nav-link>
+            @endif
             @if(auth()->user()->isAdmin())
                 <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
                     {{ __('Admin Dashboard') }}

@@ -37,6 +37,7 @@
                     <label class="text-sm font-semibold">Role</label>
                     <select name="role" class="mt-2 w-full rounded-xl border-gray-200">
                         <option value="user" @selected(old('role', $user->role) === 'user')>User</option>
+                        <option value="wholesale" @selected(old('role', $user->role) === 'wholesale')>Wholesale</option>
                         <option value="admin" @selected(old('role', $user->role) === 'admin')>Admin</option>
                     </select>
                     @error('role')

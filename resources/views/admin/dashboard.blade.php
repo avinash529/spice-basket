@@ -9,7 +9,9 @@
             </div>
             <div class="flex flex-wrap items-center gap-3 text-sm">
                 <a class="rounded-full border border-emerald-200 bg-white/80 px-4 py-2 text-emerald-700 hover:bg-emerald-50" href="{{ route('admin.orders.index') }}">Orders</a>
+                <a class="rounded-full border border-emerald-200 bg-white/80 px-4 py-2 text-emerald-700 hover:bg-emerald-50" href="{{ route('admin.users.index') }}">Users</a>
                 <a class="rounded-full border border-emerald-200 bg-white/80 px-4 py-2 text-emerald-700 hover:bg-emerald-50" href="{{ route('admin.categories.index') }}">Categories</a>
+                <a class="rounded-full border border-emerald-200 bg-white/80 px-4 py-2 text-emerald-700 hover:bg-emerald-50" href="{{ route('admin.wholesale-content.index') }}">Wholesale Content</a>
                 <a class="rounded-full bg-emerald-600 px-4 py-2 text-white shadow-sm hover:bg-emerald-500" href="{{ route('admin.products.index') }}">Products</a>
             </div>
         </div>

@@ -28,9 +28,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $defaultRoute = $request->user()?->isAdmin()
-            ? route('admin.dashboard', absolute: false)
-            : route('dashboard', absolute: false);
+        $user = $request->user();
+        $defaultRoute = route('dashboard', absolute: false);
+
+        if ($user?->isAdmin()) {
+            $defaultRoute = route('admin.dashboard', absolute: false);
+        } elseif ($user?->isWholesale()) {
+            $defaultRoute = route('wholesale.index', absolute: false);
+        }
 
         return redirect()->intended($defaultRoute);
     }
