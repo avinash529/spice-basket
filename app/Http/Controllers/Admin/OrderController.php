@@ -8,6 +8,7 @@ use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 
 class OrderController extends Controller
 {
@@ -28,7 +29,7 @@ class OrderController extends Controller
     public function update(Request $request, Order $order): RedirectResponse
     {
         $data = $request->validate([
-            'status' => ['required', 'string', 'max:50'],
+            'status' => ['required', 'string', Rule::in(Order::availableStatuses())],
         ]);
 
         $previousStatus = $order->status;

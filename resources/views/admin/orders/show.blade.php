@@ -104,7 +104,7 @@
                 @method('PATCH')
                 <label class="block text-sm font-medium text-stone-700">Update status</label>
                 <select class="w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" name="status">
-                    @foreach(['pending', 'placed', 'processing', 'shipped', 'completed', 'cancelled'] as $status)
+                    @foreach(\App\Models\Order::availableStatuses() as $status)
                         <option value="{{ $status }}" {{ $order->status === $status ? 'selected' : '' }}>{{ ucfirst($status) }}</option>
                     @endforeach
                 </select>

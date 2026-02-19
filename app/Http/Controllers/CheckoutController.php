@@ -106,7 +106,7 @@ class CheckoutController extends Controller
         $order = Order::create([
             'user_id' => $user->id,
             'address_id' => $address->id,
-            'status' => 'placed',
+            'status' => Order::STATUS_PLACED,
             'subtotal' => $totals['subtotal'],
             'total' => $totals['total'],
             'shipping_full_name' => $address->full_name,
@@ -117,7 +117,7 @@ class CheckoutController extends Controller
         ]);
 
         $order->statusHistory()->create([
-            'status' => 'placed',
+            'status' => Order::STATUS_PLACED,
             'changed_by' => $user->id,
         ]);
 

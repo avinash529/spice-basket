@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_PLACED = 'placed';
+    public const STATUS_PROCESSING = 'processing';
+    public const STATUS_SHIPPED = 'shipped';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_CANCELLED = 'cancelled';
+
     protected $fillable = [
         'user_id',
         'address_id',
@@ -20,6 +27,21 @@ class Order extends Model
         'shipping_district',
         'shipping_pincode',
     ];
+
+    /**
+     * @return list<string>
+     */
+    public static function availableStatuses(): array
+    {
+        return [
+            self::STATUS_PENDING,
+            self::STATUS_PLACED,
+            self::STATUS_PROCESSING,
+            self::STATUS_SHIPPED,
+            self::STATUS_COMPLETED,
+            self::STATUS_CANCELLED,
+        ];
+    }
 
     public function user(): BelongsTo
     {

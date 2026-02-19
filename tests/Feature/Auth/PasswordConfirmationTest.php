@@ -41,4 +41,20 @@ class PasswordConfirmationTest extends TestCase
 
         $response->assertSessionHasErrors();
     }
+
+    public function test_password_confirmation_requires_password_input(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->from('/confirm-password')
+            ->post('/confirm-password', [
+                'password' => '',
+            ]);
+
+        $response
+            ->assertRedirect('/confirm-password')
+            ->assertSessionHasErrors('password');
+    }
 }

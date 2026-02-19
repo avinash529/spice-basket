@@ -28,7 +28,11 @@ class DashboardController extends Controller
             'products_active' => Product::where('is_active', true)->count(),
             'categories_total' => Category::count(),
             'orders_total' => $totalOrders,
-            'orders_pending' => Order::whereIn('status', ['pending', 'placed', 'processing'])->count(),
+            'orders_pending' => Order::whereIn('status', [
+                Order::STATUS_PENDING,
+                Order::STATUS_PLACED,
+                Order::STATUS_PROCESSING,
+            ])->count(),
             'customers_total' => User::where('role', 'user')->count(),
             'revenue_total' => $totalRevenue,
             'revenue_today' => (float) Order::whereDate('created_at', $today)->sum('total'),

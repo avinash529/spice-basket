@@ -78,4 +78,40 @@ class AdminOrderStatusMailTest extends TestCase
 
         Mail::assertNotSent(OrderStatusUpdatedMail::class);
     }
+
+    public function test_admin_status_update_rejects_invalid_status_value(): void
+    {
+        Mail::fake();
+
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $customer = User::factory()->create();
+
+        $order = Order::create([
+            'user_id' => $customer->id,
+            'status' => 'placed',
+            'subtotal' => 500,
+            'total' => 500,
+        ]);
+
+        $response = $this
+            ->actingAs($admin)
+            ->from(route('admin.orders.show', $order))
+            ->patch(route('admin.orders.update', $order), [
+                'status' => 'invalid-status',
+            ]);
+
+        $response
+            ->assertRedirect(route('admin.orders.show', $order))
+            ->assertSessionHasErrors('status');
+
+        $this->assertDatabaseHas('orders', [
+            'id' => $order->id,
+            'status' => 'placed',
+        ]);
+
+        Mail::assertNotSent(OrderStatusUpdatedMail::class);
+    }
 }

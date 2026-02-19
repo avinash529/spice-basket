@@ -30,7 +30,7 @@ class CategoryController extends Controller
             'is_active' => ['nullable', 'boolean'],
         ]);
 
-        $data['slug'] = Str::slug($data['name']);
+        $data['slug'] = $this->uniqueSlug($data['name']);
         $data['is_active'] = $request->boolean('is_active');
 
         Category::create($data);
@@ -51,7 +51,7 @@ class CategoryController extends Controller
             'is_active' => ['nullable', 'boolean'],
         ]);
 
-        $data['slug'] = Str::slug($data['name']);
+        $data['slug'] = $this->uniqueSlug($data['name'], $category->id);
         $data['is_active'] = $request->boolean('is_active');
 
         $category->update($data);
@@ -64,5 +64,28 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()->route('admin.categories.index')->with('status', 'Category deleted.');
+    }
+
+    private function uniqueSlug(string $name, ?int $ignoreCategoryId = null): string
+    {
+        $baseSlug = Str::slug($name);
+        if ($baseSlug === '') {
+            $baseSlug = 'category';
+        }
+
+        $candidate = $baseSlug;
+        $suffix = 2;
+
+        while (
+            Category::query()
+                ->when($ignoreCategoryId, fn ($query) => $query->whereKeyNot($ignoreCategoryId))
+                ->where('slug', $candidate)
+                ->exists()
+        ) {
+            $candidate = $baseSlug.'-'.$suffix;
+            $suffix++;
+        }
+
+        return $candidate;
     }
 }
