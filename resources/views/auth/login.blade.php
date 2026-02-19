@@ -9,7 +9,7 @@
             <div class="relative hidden sm:flex flex-col justify-between bg-gradient-to-br from-emerald-600 via-emerald-500 to-amber-500 p-10 text-white lg:p-12">
                 <div>
                     <p class="text-xs uppercase tracking-[0.35em] text-emerald-100">Spice Basket</p>
-                    <h1 class="mt-5 text-4xl font-semibold leading-tight">Welcome back</h1>
+                    <h1 class="mt-5 text-3xl sm:text-4xl font-semibold leading-tight">Welcome back</h1>
                     <p class="mt-4 text-sm text-emerald-50">Sign in to manage your orders, saved addresses, and discover fresh spices.</p>
                 </div>
                 <div class="rounded-2xl bg-white/15 p-5 text-sm">
@@ -19,10 +19,10 @@
             </div>
 
             <div class="p-7 sm:p-10 lg:p-12">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <p class="text-xs uppercase tracking-[0.3em] text-emerald-600">Account</p>
-                        <h2 class="mt-2 text-3xl font-semibold text-stone-900">Login</h2>
+                        <h2 class="mt-2 text-2xl sm:text-3xl font-semibold text-stone-900">Login</h2>
                     </div>
                     <a class="text-sm font-medium text-emerald-700 hover:text-emerald-600" href="{{ route('register') }}">Create account</a>
                 </div>
@@ -57,7 +57,7 @@
                         <x-input-error :messages="$errors->get('password')" class="mt-2" />
                     </div>
 
-                    <div class="flex items-center justify-between text-sm">
+                    <div class="flex flex-wrap items-center justify-between gap-3 text-sm">
                         <label for="remember_me" class="inline-flex items-center gap-2 text-stone-600">
                             <input id="remember_me" type="checkbox" class="rounded border-stone-300 text-emerald-600 focus:ring-emerald-200" name="remember">
                             Remember me

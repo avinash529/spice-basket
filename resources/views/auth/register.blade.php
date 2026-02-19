@@ -9,7 +9,7 @@
             <div class="relative hidden sm:flex flex-col justify-between bg-gradient-to-br from-amber-500 via-rose-500 to-emerald-500 p-10 text-white lg:p-12">
                 <div>
                     <p class="text-xs uppercase tracking-[0.35em] text-white/80">Spice Basket</p>
-                    <h1 class="mt-5 text-4xl font-semibold leading-tight">Create your account</h1>
+                    <h1 class="mt-5 text-3xl sm:text-4xl font-semibold leading-tight">Create your account</h1>
                     <p class="mt-4 text-sm text-white/90">Join to track orders and unlock farmer-direct spices.</p>
                 </div>
                 <div class="rounded-2xl bg-white/15 p-5 text-sm">
@@ -19,10 +19,10 @@
             </div>
 
             <div class="p-7 sm:p-10 lg:p-12">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <p class="text-xs uppercase tracking-[0.3em] text-emerald-600">Account</p>
-                        <h2 class="mt-2 text-3xl font-semibold text-stone-900">Register</h2>
+                        <h2 class="mt-2 text-2xl sm:text-3xl font-semibold text-stone-900">Register</h2>
                     </div>
                     <a class="text-sm font-medium text-emerald-700 hover:text-emerald-600" href="{{ route('login') }}">Already registered?</a>
                 </div>

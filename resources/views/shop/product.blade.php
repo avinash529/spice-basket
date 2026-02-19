@@ -29,7 +29,7 @@
                 <div class="absolute inset-0 bg-gradient-to-tr from-stone-900/10 via-transparent to-amber-200/30"></div>
             </div>
             <div>
-                <h1 class="text-3xl font-semibold">{{ $product->name }}</h1>
+                <h1 class="text-2xl sm:text-3xl font-semibold">{{ $product->name }}</h1>
                 <p class="mt-2 text-stone-600">{{ $product->origin ?? 'Single origin' }} · {{ $product->unit }}</p>
                 <p class="mt-4 text-2xl font-semibold">
                     INR <span id="product-price">{{ number_format($displayPrice, 2) }}</span>

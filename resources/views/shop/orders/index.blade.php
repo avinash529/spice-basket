@@ -1,4 +1,4 @@
-﻿<x-shop-layout>
+<x-shop-layout>
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <h1 class="text-2xl font-semibold">My orders</h1>
 
@@ -9,7 +9,7 @@
         <div class="mt-6 space-y-4">
             @forelse($orders as $order)
                 <a href="{{ route('orders.show', $order) }}" class="block rounded-2xl bg-white p-5 shadow-sm hover:border-emerald-200">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
                             <p class="font-semibold">Order #{{ $order->id }}</p>
                             <p class="text-sm text-gray-500">{{ $order->created_at->format('M d, Y') }}</p>

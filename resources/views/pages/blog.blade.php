@@ -2,7 +2,7 @@
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="max-w-4xl">
             <p class="text-xs uppercase tracking-[0.2em] text-sky-700 font-semibold">Blog</p>
-            <h1 class="mt-2 text-4xl font-semibold">Practical spice guides and kitchen insights</h1>
+            <h1 class="mt-2 text-3xl sm:text-4xl font-semibold">Practical spice guides and kitchen insights</h1>
             <p class="mt-4 text-stone-600">
                 Learn buying basics, storage tips, and flavor techniques that help you cook better with less guesswork.
             </p>
@@ -14,7 +14,7 @@
                     <p class="text-xs uppercase tracking-[0.15em] text-sky-700 font-semibold">{{ $post['tag'] }}</p>
                     <h2 class="mt-3 text-xl font-semibold leading-snug">{{ $post['title'] }}</h2>
                     <p class="mt-3 text-sm text-stone-600">{{ $post['excerpt'] }}</p>
-                    <div class="mt-4 flex items-center justify-between text-xs text-stone-500">
+                    <div class="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-stone-500">
                         <span>{{ $post['published_at'] }}</span>
                         <span>{{ $post['read_time'] }}</span>
                     </div>

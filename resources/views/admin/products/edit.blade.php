@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -115,7 +115,7 @@
             <div class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
                 <form method="POST" action="{{ route('admin.products.stock', $product) }}" class="rounded-3xl border border-stone-100 bg-white/90 p-6 shadow-lg space-y-4">
                     @csrf
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
                             <p class="text-xs uppercase tracking-[0.2em] text-emerald-600">Inventory</p>
                             <h3 class="text-lg font-semibold text-stone-900">Add stock (purchase)</h3>
@@ -163,7 +163,7 @@
                 </form>
 
                 <div class="rounded-3xl border border-stone-100 bg-white/90 p-6 shadow-lg space-y-6">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
                             <p class="text-xs uppercase tracking-[0.2em] text-stone-500">Recent purchases</p>
                             <h3 class="text-lg font-semibold text-stone-900">Ledger</h3>
@@ -172,7 +172,7 @@
                     </div>
                     <div class="mt-4 space-y-3 text-sm">
                         @forelse($purchases as $purchase)
-                            <div class="flex items-center justify-between gap-3 border-b border-stone-100 pb-3">
+                            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-stone-100 pb-3">
                                 <div>
                                     <p class="font-semibold text-stone-800">{{ $purchase->quantity }} {{ $purchase->unit ?? $product->unit }}</p>
                                     <p class="text-stone-500">{{ $purchase->farmer?->name ?? 'Farmer' }}</p>
@@ -190,7 +190,7 @@
                     </div>
 
                     <div class="border-t border-stone-100 pt-6">
-                        <div class="flex items-center justify-between">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
                                 <p class="text-xs uppercase tracking-[0.2em] text-stone-500">Inventory</p>
                                 <h3 class="text-lg font-semibold text-stone-900">Stock movements</h3>
@@ -199,7 +199,7 @@
                         </div>
                         <div class="mt-4 space-y-3 text-sm">
                             @forelse($movements as $movement)
-                                <div class="flex items-center justify-between gap-3 border-b border-stone-100 pb-3">
+                                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-stone-100 pb-3">
                                     <div>
                                         <p class="font-semibold text-stone-800">
                                             {{ $movement->type === 'in' ? '+' : '-' }}{{ $movement->quantity }} {{ $product->unit }}

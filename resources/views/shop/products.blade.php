@@ -1,4 +1,4 @@
-﻿<x-shop-layout>
+<x-shop-layout>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="flex flex-col lg:flex-row gap-8">
             <aside class="lg:w-1/4 space-y-6">
@@ -23,7 +23,7 @@
             </aside>
 
             <section class="flex-1">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-wrap items-center justify-between gap-3">
                     <h1 class="text-2xl font-semibold">Spices</h1>
                     <span class="text-sm text-stone-500">{{ $products->total() }} items</span>
                 </div>
@@ -63,7 +63,7 @@
                                 </p>
                             @endif
                             <p class="mt-2 text-sm text-stone-600">{{ $product->unit }}</p>
-                            <div class="mt-4 flex items-center justify-between">
+                            <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
                                 <span class="font-semibold">
                                     INR {{ number_format($listDisplayPrice, 2) }}
                                     @if($product->hasActiveOffer())

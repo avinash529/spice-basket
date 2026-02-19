@@ -1,6 +1,6 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Farmers</h2>
             <a class="rounded-full bg-emerald-600 px-4 py-2 text-white" href="{{ route('admin.farmers.create') }}">Add farmer</a>
         </div>
@@ -12,7 +12,8 @@
                 <div class="rounded-xl bg-emerald-50 p-4 text-emerald-700">{{ session('status') }}</div>
             @endif
             <div class="rounded-2xl bg-white p-6 shadow-sm">
-                <table class="w-full text-sm">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm">
                     <thead class="text-left text-gray-500">
                         <tr>
                             <th class="py-2">Name</th>
@@ -66,7 +67,8 @@
                             </tr>
                         @endforelse
                     </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
             {{ $farmers->links() }}
         </div>

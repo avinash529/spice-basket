@@ -9,7 +9,8 @@
                 <div class="rounded-xl bg-emerald-50 p-4 text-emerald-700">{{ session('status') }}</div>
             @endif
             <div class="rounded-2xl bg-white p-6 shadow-sm">
-                <table class="w-full text-sm">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm">
                     <thead class="text-left text-gray-500">
                         <tr>
                             <th class="py-2">Order</th>
@@ -48,7 +49,8 @@
                             </tr>
                         @endforelse
                     </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
             {{ $orders->links() }}
         </div>

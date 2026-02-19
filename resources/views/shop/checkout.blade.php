@@ -1,4 +1,4 @@
-﻿<x-shop-layout>
+<x-shop-layout>
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <h1 class="text-2xl font-semibold">Checkout</h1>
         <p class="mt-2 text-gray-600">Demo checkout. No payment is collected.</p>
@@ -19,13 +19,13 @@
             <h2 class="font-semibold">Order summary</h2>
             <div class="mt-4 space-y-3">
                 @foreach($cart as $item)
-                    <div class="flex items-center justify-between text-sm">
+                    <div class="flex flex-wrap items-center justify-between gap-3 text-sm">
                         <span>{{ $item['name'] }} ({{ $item['unit'] }}) x {{ $item['quantity'] }}</span>
                         <span>INR {{ number_format($item['price'] * $item['quantity'], 2) }}</span>
                     </div>
                 @endforeach
             </div>
-            <div class="mt-4 flex items-center justify-between font-semibold">
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-3 font-semibold">
                 <span>Total</span>
                 <span>INR {{ number_format($totals['total'], 2) }}</span>
             </div>
@@ -35,7 +35,7 @@
             @csrf
 
             <div class="rounded-2xl bg-white p-6 shadow-sm">
-                <div class="flex items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center justify-between gap-4">
                     <h2 class="font-semibold">Delivery address</h2>
                     <a class="text-sm text-emerald-700 hover:text-emerald-600" href="{{ route('profile.edit') }}#addresses">Manage in profile</a>
                 </div>

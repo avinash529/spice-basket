@@ -64,7 +64,7 @@
 
             <div class="grid gap-6 lg:grid-cols-3">
                 <div class="rounded-3xl border border-stone-100 bg-white/90 p-6 shadow-lg lg:col-span-2">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
                             <p class="text-xs uppercase tracking-[0.2em] text-stone-500">7-day trend</p>
                             <h3 class="text-lg font-semibold text-stone-900">Sales performance</h3>
@@ -103,7 +103,7 @@
                                     default => 'bg-amber-50 text-amber-700',
                                 };
                             @endphp
-                            <div class="flex items-center justify-between rounded-xl border border-stone-100 px-3 py-2">
+                            <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-stone-100 px-3 py-2">
                                 <span class="rounded-full px-3 py-1 text-xs font-semibold {{ $statusClass }}">
                                     {{ ucfirst($status->status) }}
                                 </span>
@@ -118,7 +118,7 @@
 
             <div class="grid gap-6 lg:grid-cols-3">
                 <div class="rounded-3xl border border-stone-100 bg-white/90 p-6 shadow-lg lg:col-span-2">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
                             <p class="text-xs uppercase tracking-[0.2em] text-stone-500">Top products</p>
                             <h3 class="text-lg font-semibold text-stone-900">Best sellers by quantity</h3>
@@ -156,7 +156,7 @@
                     <h3 class="text-lg font-semibold text-stone-900">Needs restock</h3>
                     <div class="mt-4 space-y-3">
                         @forelse($stockAlerts as $product)
-                            <div class="flex items-center justify-between rounded-xl border border-stone-100 px-3 py-2 text-sm">
+                            <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-stone-100 px-3 py-2 text-sm">
                                 <p class="font-medium text-stone-800">{{ $product->name }}</p>
                                 <span class="rounded-full px-3 py-1 text-xs font-semibold {{ $product->stock_qty === 0 ? 'bg-rose-50 text-rose-700' : 'bg-amber-50 text-amber-700' }}">
                                     {{ $product->stock_qty }} {{ $product->unit }}
@@ -170,7 +170,7 @@
             </div>
 
             <div class="rounded-3xl border border-stone-100 bg-white/90 p-6 shadow-lg">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <p class="text-xs uppercase tracking-[0.2em] text-stone-500">Recent orders</p>
                         <h3 class="text-lg font-semibold text-stone-900">Latest customer orders</h3>

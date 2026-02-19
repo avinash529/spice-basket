@@ -3,7 +3,7 @@
         <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
             <div>
                 <p class="text-xs uppercase tracking-[0.2em] text-amber-700 font-semibold">Gift Boxes</p>
-                <h1 class="mt-2 text-4xl font-semibold">Premium spice gift collections</h1>
+                <h1 class="mt-2 text-3xl sm:text-4xl font-semibold">Premium spice gift collections</h1>
                 <p class="mt-3 text-stone-600 max-w-3xl">
                     Festive hampers, event packs, and presentation-ready assortments that make memorable gifts.
                 </p>

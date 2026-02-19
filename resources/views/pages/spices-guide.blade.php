@@ -2,7 +2,7 @@
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="max-w-4xl">
             <p class="text-xs uppercase tracking-[0.2em] text-emerald-700 font-semibold">List of Spices</p>
-            <h1 class="mt-2 text-4xl font-semibold">Kerala spice guide for home kitchens</h1>
+            <h1 class="mt-2 text-3xl sm:text-4xl font-semibold">Kerala spice guide for home kitchens</h1>
             <p class="mt-4 text-stone-600">
                 A quick reference of popular spices, flavor notes, and where to use them in daily cooking.
             </p>

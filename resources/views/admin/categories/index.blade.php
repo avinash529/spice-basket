@@ -15,7 +15,8 @@
                 <div class="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4 text-emerald-700">{{ session('status') }}</div>
             @endif
             <div class="rounded-3xl border border-stone-100 bg-white/90 p-6 shadow-lg">
-                <table class="w-full text-sm">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm">
                     <thead class="text-left text-stone-500">
                         <tr>
                             <th class="py-2">Name</th>
@@ -82,7 +83,8 @@
                             </tr>
                         @endforelse
                     </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
             {{ $categories->links() }}
         </div>

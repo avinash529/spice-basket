@@ -35,10 +35,10 @@
                     </div>
                 </div>
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex items-center justify-between h-16 gap-4">
-                        <a href="{{ route('home') }}" class="flex items-center gap-3 font-semibold text-lg shrink-0">
-                            <x-application-logo class="h-10 w-10" />
-                            <span class="tracking-tight">Spice Basket</span>
+                    <div class="flex items-center justify-between h-16 gap-3 sm:gap-4">
+                        <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 font-semibold text-base sm:text-lg shrink-0">
+                            <x-application-logo class="h-9 w-9 sm:h-10 sm:w-10" />
+                            <span class="hidden sm:inline tracking-tight">Spice Basket</span>
                         </a>
                         <nav class="hidden lg:flex items-center gap-6 text-sm flex-1 justify-center">
                             <a class="{{ request()->routeIs('products.*') ? 'text-emerald-700 font-semibold' : 'text-stone-700 hover:text-emerald-600' }}" href="{{ route('products.index') }}">Products</a>
@@ -70,8 +70,8 @@
                             </div>
                         </nav>
 
-                        <div class="flex items-center gap-3 text-sm whitespace-nowrap shrink-0">
-                            <a class="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-emerald-700 hover:bg-emerald-100" href="{{ route('cart.index') }}">
+                        <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm whitespace-nowrap shrink-0">
+                            <a class="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-700 hover:bg-emerald-100 sm:px-3 sm:py-1.5" href="{{ route('cart.index') }}">
                                 Cart ({{ $cartCount }})
                             </a>
 
@@ -83,7 +83,7 @@
                                     <button
                                         type="button"
                                         @click="userMenu = !userMenu"
-                                        class="inline-flex items-center gap-2 rounded-full border border-stone-200 px-3 py-1.5 text-stone-700 hover:border-stone-300 hover:bg-stone-50"
+                                        class="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-stone-200 px-2.5 py-1 sm:px-3 sm:py-1.5 text-stone-700 hover:border-stone-300 hover:bg-stone-50"
                                     >
                                         Account
                                         <svg class="h-4 w-4 transition-transform" :class="{ 'rotate-180': userMenu }" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -115,7 +115,7 @@
                     </div>
                 </div>
                 <div class="border-t border-stone-100 lg:hidden">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 text-sm flex items-center gap-2">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 text-sm flex flex-wrap items-center gap-2">
                         <a class="rounded-full border border-stone-200 px-3 py-1.5 {{ request()->routeIs('products.*') ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'text-stone-700 hover:bg-stone-100' }}" href="{{ route('products.index') }}">Products</a>
                         <a class="rounded-full border border-stone-200 px-3 py-1.5 {{ request()->routeIs('offers.*') ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'text-stone-700 hover:bg-stone-100' }}" href="{{ route('offers.index') }}">Offers</a>
                         <button
@@ -184,20 +184,20 @@
                     <div>
                         <h3 class="text-sm font-semibold uppercase tracking-[0.12em] text-stone-100">Explore</h3>
                         <ul class="mt-3 space-y-2 text-sm">
-                            <li><a class="hover:text-white" href="{{ route('spices.guide') }}">List of Spices</a></li>
-                            <li><a class="hover:text-white" href="{{ route('offers.index') }}">Latest Offer</a></li>
-                            <li><a class="hover:text-white" href="{{ route('gift-boxes.index') }}">Gift Boxes</a></li>
-                            <li><a class="hover:text-white" href="{{ route('blog.index') }}">Blog</a></li>
-                            <li><a class="hover:text-white" href="{{ route('corporate-gifts.index') }}">Corporate Gift Boxes</a></li>
+                            <li><a class="transition-colors hover:text-emerald-300" href="{{ route('spices.guide') }}">List of Spices</a></li>
+                            <li><a class="transition-colors hover:text-emerald-300" href="{{ route('offers.index') }}">Latest Offer</a></li>
+                            <li><a class="transition-colors hover:text-emerald-300" href="{{ route('gift-boxes.index') }}">Gift Boxes</a></li>
+                            <li><a class="transition-colors hover:text-emerald-300" href="{{ route('blog.index') }}">Blog</a></li>
+                            <li><a class="transition-colors hover:text-emerald-300" href="{{ route('corporate-gifts.index') }}">Corporate Gift Boxes</a></li>
                         </ul>
                     </div>
                     <div>
                         <h3 class="text-sm font-semibold uppercase tracking-[0.12em] text-stone-100">Policies</h3>
                         <ul class="mt-3 space-y-2 text-sm">
-                            <li><a class="hover:text-white" href="{{ route('policies.shipping') }}">Shipping Policy</a></li>
-                            <li><a class="hover:text-white" href="{{ route('policies.refund') }}">Refund Policy</a></li>
-                            <li><a class="hover:text-white" href="{{ route('policies.privacy') }}">Privacy Policy</a></li>
-                            <li><a class="hover:text-white" href="{{ route('policies.terms') }}">Terms & Conditions</a></li>
+                            <li><a class="transition-colors hover:text-emerald-300" href="{{ route('policies.shipping') }}">Shipping Policy</a></li>
+                            <li><a class="transition-colors hover:text-emerald-300" href="{{ route('policies.refund') }}">Refund Policy</a></li>
+                            <li><a class="transition-colors hover:text-emerald-300" href="{{ route('policies.privacy') }}">Privacy Policy</a></li>
+                            <li><a class="transition-colors hover:text-emerald-300" href="{{ route('policies.terms') }}">Terms & Conditions</a></li>
                         </ul>
                     </div>
                     <div>

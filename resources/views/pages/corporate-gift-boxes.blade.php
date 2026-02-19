@@ -3,7 +3,7 @@
         <div class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
             <div>
                 <p class="text-xs uppercase tracking-[0.2em] text-amber-700 font-semibold">Corporate Gift Boxes</p>
-                <h1 class="mt-2 text-4xl font-semibold">Bulk gifting with custom branding support</h1>
+                <h1 class="mt-2 text-3xl sm:text-4xl font-semibold">Bulk gifting with custom branding support</h1>
                 <p class="mt-4 text-stone-600">
                     Build memorable gifts for clients, teams, and events with premium Kerala spices and curated hampers.
                 </p>

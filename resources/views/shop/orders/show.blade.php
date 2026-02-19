@@ -1,12 +1,12 @@
-﻿<x-shop-layout>
+<x-shop-layout>
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <h1 class="text-2xl font-semibold">Order #{{ $order->id }}</h1>
             <a class="text-emerald-700 hover:text-emerald-600" href="{{ route('dashboard') }}">Back to orders</a>
         </div>
 
         <div class="mt-4 rounded-2xl bg-white p-6 shadow-sm">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <p class="text-sm text-gray-500">Placed on</p>
                     <p class="font-semibold">{{ $order->created_at->format('M d, Y') }}</p>
@@ -40,7 +40,7 @@
             <h2 class="font-semibold">Tracking timeline</h2>
             <div class="mt-4 space-y-3 text-sm">
                 @forelse($order->statusHistory as $history)
-                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-3">
                         <div>
                             <p class="font-semibold">{{ ucfirst($history->status) }}</p>
                             @if($history->note)
@@ -59,7 +59,7 @@
             <h2 class="font-semibold">Items</h2>
             <div class="mt-4 space-y-3">
                 @foreach($order->items as $item)
-                    <div class="flex items-center justify-between text-sm">
+                    <div class="flex flex-wrap items-center justify-between gap-3 text-sm">
                         <span>{{ $item->product->name ?? 'Product' }} x {{ $item->quantity }}</span>
                         <span>INR {{ number_format($item->line_total, 2) }}</span>
                     </div>

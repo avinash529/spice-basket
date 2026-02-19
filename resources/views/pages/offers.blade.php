@@ -3,12 +3,12 @@
         <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
                 <p class="text-xs uppercase tracking-[0.2em] text-rose-700 font-semibold">Latest Offer</p>
-                <h1 class="mt-2 text-4xl font-semibold">Fresh deals on Kerala spices</h1>
+                <h1 class="mt-2 text-3xl sm:text-4xl font-semibold">Fresh deals on Kerala spices</h1>
                 <p class="mt-3 text-stone-600 max-w-3xl">
                     Curated picks from our active catalog, including best sellers and recently updated products.
                 </p>
             </div>
-            <a href="{{ route('products.index') }}" class="inline-flex items-center rounded-full border border-emerald-200 bg-white px-5 py-2.5 text-sm font-medium text-emerald-700 hover:bg-emerald-50">
+            <a href="{{ route('products.index') }}" class="inline-flex self-start items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm text-emerald-700 hover:bg-emerald-100" style="height: max-content;">
                 View full catalog
             </a>
         </div>
@@ -52,7 +52,7 @@
                     </div>
                     <h2 class="mt-4 font-semibold">{{ $product->name }}</h2>
                     <p class="mt-1 text-sm text-stone-600">{{ $product->category?->name ?? 'Spices' }}</p>
-                    <div class="mt-3 flex items-center justify-between">
+                    <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
                         <p class="font-semibold">
                             INR {{ number_format($product->displayPrice(), 2) }}
                             @if($product->hasActiveOffer())

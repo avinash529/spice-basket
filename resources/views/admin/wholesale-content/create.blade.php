@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
                 <p class="text-xs uppercase tracking-[0.3em] text-emerald-600">Admin</p>
                 <h2 class="font-semibold text-2xl text-stone-900 leading-tight">Add Wholesale Content</h2>

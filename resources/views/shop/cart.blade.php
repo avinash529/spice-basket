@@ -1,6 +1,6 @@
-﻿<x-shop-layout>
+<x-shop-layout>
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <h1 class="text-2xl font-semibold">Your cart</h1>
             <a class="text-emerald-700 hover:text-emerald-600" href="{{ route('products.index') }}">Continue shopping</a>
         </div>
@@ -40,14 +40,14 @@
                         </div>
                     @endforeach
                 </div>
-                <div class="flex items-center justify-between">
+                <div class="flex flex-wrap items-center justify-between gap-3">
                     <button class="rounded-full border border-emerald-600 px-5 py-2 text-emerald-700" type="submit">Update cart</button>
                     <button class="text-sm text-gray-500" type="submit" formaction="{{ route('cart.clear') }}">Clear cart</button>
                 </div>
             </form>
 
             <div class="mt-8 rounded-2xl bg-white p-6 shadow-sm">
-                <div class="flex items-center justify-between text-lg font-semibold">
+                <div class="flex flex-wrap items-center justify-between gap-3 text-lg font-semibold">
                     <span>Total</span>
                     <span>INR {{ number_format($totals['total'], 2) }}</span>
                 </div>

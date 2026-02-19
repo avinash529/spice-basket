@@ -22,7 +22,7 @@
 @endphp
 
 <div>
-    <div class="flex items-center justify-between">
+    <div class="flex flex-wrap items-center justify-between gap-3">
         <label class="block text-sm font-medium text-stone-700">Weight Options</label>
         <button type="button" id="add-weight-option" class="rounded-full border border-emerald-200 px-4 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-50">
             Add row

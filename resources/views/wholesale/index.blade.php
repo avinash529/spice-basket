@@ -2,7 +2,7 @@
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-6 sm:p-8">
             <p class="text-xs uppercase tracking-[0.2em] text-emerald-700 font-semibold">Wholesale Portal</p>
-            <h1 class="mt-2 text-3xl font-semibold text-stone-900">Bulk and Wholesale Information</h1>
+            <h1 class="mt-2 text-2xl sm:text-3xl font-semibold text-stone-900">Bulk and Wholesale Information</h1>
             <p class="mt-3 text-stone-700">
                 Welcome, {{ $user->name }}. This section contains wholesale-specific content managed by admin.
             </p>

@@ -55,7 +55,7 @@
             </div>
 
             <div class="rounded-3xl border border-stone-100 bg-white/90 p-6 shadow-lg">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <p class="text-xs uppercase tracking-[0.2em] text-stone-500">Tracking</p>
                         <h3 class="text-lg font-semibold text-stone-900">Order timeline</h3>
@@ -63,7 +63,7 @@
                 </div>
                 <div class="mt-4 space-y-3 text-sm">
                     @forelse($order->statusHistory as $history)
-                        <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+                        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-stone-100 pb-3">
                             <div class="flex items-start gap-3">
                                 <span class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></span>
                                 <div>
@@ -82,7 +82,7 @@
             </div>
 
             <div class="rounded-3xl border border-stone-100 bg-white/90 p-6 shadow-lg">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <p class="text-xs uppercase tracking-[0.2em] text-stone-500">Items</p>
                         <h3 class="text-lg font-semibold text-stone-900">Order items</h3>
@@ -91,7 +91,7 @@
                 </div>
                 <div class="mt-4 space-y-3">
                     @foreach($order->items as $item)
-                        <div class="flex items-center justify-between text-sm border-b border-stone-100 pb-3">
+                        <div class="flex flex-wrap items-center justify-between gap-3 text-sm border-b border-stone-100 pb-3">
                             <span class="text-stone-700">{{ $item->product->name ?? 'Product' }} x {{ $item->quantity }}</span>
                             <span class="font-semibold text-stone-800">INR {{ number_format($item->line_total, 2) }}</span>
                         </div>

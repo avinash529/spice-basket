@@ -1,4 +1,4 @@
-﻿<x-shop-layout>
+<x-shop-layout>
     <section class="relative overflow-hidden">
         <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.12),_transparent_55%)]"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
@@ -11,7 +11,7 @@
                         <a href="{{ route('products.index') }}" class="rounded-full bg-emerald-600 px-6 py-3 text-white font-medium shadow-sm hover:bg-emerald-500">Shop spices</a>
                         <a href="#categories" class="rounded-full border border-emerald-600 px-6 py-3 text-emerald-700 font-medium hover:bg-emerald-50">Browse categories</a>
                     </div>
-                    <div class="mt-10 grid grid-cols-3 gap-6 text-sm text-stone-600">
+                    <div class="mt-10 grid grid-cols-1 gap-4 text-sm text-stone-600 sm:grid-cols-3 sm:gap-6">
                         <div>
                             <p class="text-2xl font-semibold text-stone-900">120+</p>
                             <p>Farmer partners</p>
@@ -69,7 +69,7 @@
     </section>
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <h2 class="text-2xl font-semibold">Featured spices</h2>
             <a class="text-emerald-700 hover:text-emerald-600" href="{{ route('products.index') }}">View all</a>
         </div>
@@ -101,7 +101,7 @@
                     </div>
                     <h3 class="mt-4 font-semibold text-lg">{{ $product->name }}</h3>
                     <p class="mt-2 text-sm text-stone-600">{{ $product->unit }}</p>
-                    <div class="mt-4 flex items-center justify-between">
+                    <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
                         <span class="font-semibold">
                             INR {{ number_format($product->displayPrice(), 2) }}
                             @if($product->hasActiveOffer())
@@ -119,7 +119,7 @@
 
     <section class="bg-white/70 border-y border-stone-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <p class="text-xs uppercase tracking-[0.2em] text-rose-700 font-semibold">Flash deals</p>
                     <h2 class="mt-2 text-2xl font-semibold">Latest offers</h2>
@@ -169,7 +169,7 @@
         <div class="grid gap-8 lg:grid-cols-[1fr_1.2fr] items-center">
             <div>
                 <p class="text-xs uppercase tracking-[0.2em] text-amber-700 font-semibold">Gift hampers</p>
-                <h2 class="mt-2 text-3xl font-semibold">Gift boxes for festivals, weddings, and corporate events</h2>
+                <h2 class="mt-2 text-2xl sm:text-3xl font-semibold">Gift boxes for festivals, weddings, and corporate events</h2>
                 <p class="mt-4 text-stone-600">
                     Choose curated spice collections in premium packaging. We can help with bulk orders, personalized packs, and event-ready delivery.
                 </p>
