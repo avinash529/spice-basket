@@ -28,6 +28,7 @@
     $formId = "firebase-google-form-{$context}";
     $tokenId = "firebase-google-token-{$context}";
     $buttonId = "firebase-google-button-{$context}";
+    $buttonLabelId = "firebase-google-label-{$context}";
     $errorId = "firebase-google-error-{$context}";
 @endphp
 
@@ -40,12 +41,12 @@
     <button
         type="button"
         id="{{ $buttonId }}"
-        class="flex w-full items-center justify-center gap-3 rounded-full border border-stone-300 bg-white px-6 py-3 text-sm font-semibold text-stone-700 transition hover:border-stone-400 hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-70"
+        class="flex min-h-11 w-full items-center justify-center gap-3 rounded-full border border-stone-300 bg-white px-4 py-3 text-sm font-semibold text-stone-700 transition hover:border-stone-400 hover:bg-stone-50 sm:px-6 disabled:cursor-not-allowed disabled:opacity-70"
     >
         <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
             <path fill="#EA4335" d="M12 10.3v3.9h5.5c-.2 1.2-1.4 3.6-5.5 3.6-3.3 0-6-2.7-6-6s2.7-6 6-6c1.9 0 3.2.8 4 1.5l2.7-2.6C17 3.1 14.7 2 12 2 6.5 2 2 6.5 2 12s4.5 10 10 10c5.8 0 9.7-4.1 9.7-9.8 0-.7-.1-1.2-.2-1.9H12z"/>
         </svg>
-        {{ $buttonText }}
+        <span id="{{ $buttonLabelId }}" class="text-center leading-5">{{ $buttonText }}</span>
     </button>
     <p id="{{ $errorId }}" class="mt-2 hidden text-sm text-rose-600"></p>
 
@@ -55,11 +56,12 @@
 
         const firebaseConfig = @json($firebaseConfig);
         const button = document.getElementById(@json($buttonId));
+        const buttonLabel = document.getElementById(@json($buttonLabelId));
         const errorBox = document.getElementById(@json($errorId));
         const form = document.getElementById(@json($formId));
         const tokenInput = document.getElementById(@json($tokenId));
 
-        if (button && errorBox && form && tokenInput) {
+        if (button && buttonLabel && errorBox && form && tokenInput) {
             const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
             const auth = getAuth(app);
             const provider = new GoogleAuthProvider();
@@ -73,10 +75,10 @@
             };
 
             button.addEventListener("click", async () => {
-                const originalLabel = button.textContent;
+                const originalLabel = buttonLabel.textContent;
 
                 button.disabled = true;
-                button.textContent = "Signing in...";
+                buttonLabel.textContent = "Signing in...";
                 errorBox.classList.add("hidden");
                 errorBox.textContent = "";
 
@@ -94,7 +96,7 @@
                     errorBox.textContent = message;
                     errorBox.classList.remove("hidden");
                     button.disabled = false;
-                    button.textContent = originalLabel;
+                    buttonLabel.textContent = originalLabel;
                 }
             });
         }

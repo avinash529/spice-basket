@@ -5,7 +5,7 @@
             <p class="mt-2 text-sm text-stone-700">Sign in to track orders and manage your account.</p>
         </div>
 
-        <div class="grid gap-0 overflow-hidden rounded-[2rem] border border-stone-100 bg-white/95 shadow-2xl sm:grid-cols-2">
+        <div class="grid gap-0 overflow-hidden rounded-2xl border border-stone-100 bg-white/95 shadow-2xl sm:rounded-[2rem] sm:grid-cols-2">
             <div class="relative hidden sm:flex flex-col justify-between bg-gradient-to-br from-emerald-600 via-emerald-500 to-amber-500 p-10 text-white lg:p-12">
                 <div>
                     <p class="text-xs uppercase tracking-[0.35em] text-emerald-100">Spice Basket</p>
@@ -18,13 +18,13 @@
                 </div>
             </div>
 
-            <div class="p-7 sm:p-10 lg:p-12">
-                <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="p-5 sm:p-10 lg:p-12">
+                <div class="flex flex-wrap items-start justify-between gap-3 sm:items-center">
                     <div>
                         <p class="text-xs uppercase tracking-[0.3em] text-emerald-600">Account</p>
                         <h2 class="mt-2 text-2xl sm:text-3xl font-semibold text-stone-900">Login</h2>
                     </div>
-                    <a class="text-sm font-medium text-emerald-700 hover:text-emerald-600" href="{{ route('register') }}">Create account</a>
+                    <a class="w-full text-sm font-medium text-emerald-700 hover:text-emerald-600 sm:w-auto sm:text-right" href="{{ route('register') }}">Create account</a>
                 </div>
 
                 <x-auth-session-status class="mt-5" :status="session('status')" />
