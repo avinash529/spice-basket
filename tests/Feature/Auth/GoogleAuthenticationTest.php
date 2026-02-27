@@ -44,11 +44,16 @@ class GoogleAuthenticationTest extends TestCase
 
         $this->assertAuthenticated();
         $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertSessionHas('auth.login_method', 'google');
         $this->assertDatabaseHas('users', [
             'email' => 'firebase.new@example.com',
             'google_id' => 'firebase-user-1',
             'google_avatar' => 'https://example.com/firebase-avatar.jpg',
         ]);
+
+        $user = User::query()->where('email', 'firebase.new@example.com')->first();
+        $this->assertNotNull($user);
+        $this->assertNull($user->password);
     }
 
     public function test_firebase_google_sign_in_links_existing_user_by_email(): void

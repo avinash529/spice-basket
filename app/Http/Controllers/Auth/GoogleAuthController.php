@@ -8,7 +8,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class GoogleAuthController extends Controller
@@ -101,12 +100,13 @@ class GoogleAuthController extends Controller
                 'google_id' => $firebaseUid,
                 'google_avatar' => $avatar,
                 'email_verified_at' => $isEmailVerified ? now() : null,
-                'password' => Str::random(32),
+                'password' => null,
             ]);
         }
 
         Auth::login($user);
         $request->session()->regenerate();
+        $request->session()->put('auth.login_method', 'google');
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

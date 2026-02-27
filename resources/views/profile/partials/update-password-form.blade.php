@@ -1,9 +1,17 @@
 <section>
+    @php($profileUser = $user ?? auth()->user())
+    @php($signedInViaGoogle = session('auth.login_method') === 'google')
+    @php($requiresCurrentPassword = filled($profileUser?->password) && ! ($signedInViaGoogle && filled($profileUser?->google_id)))
+
     <header>
         <p class="text-xs uppercase tracking-[0.25em] text-emerald-600">{{ __('Security') }}</p>
-        <h2 class="mt-2 text-lg font-semibold text-stone-900">{{ __('Update Password') }}</h2>
+        <h2 class="mt-2 text-lg font-semibold text-stone-900">
+            {{ $requiresCurrentPassword ? __('Update Password') : __('Set Password') }}
+        </h2>
         <p class="mt-1 text-sm text-stone-600">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
+            {{ $requiresCurrentPassword
+                ? __('Ensure your account is using a long, random password to stay secure.')
+                : __('Add a password so you can sign in with email and password too.') }}
         </p>
     </header>
 
@@ -11,11 +19,13 @@
         @csrf
         @method('put')
 
-        <div>
-            <label class="text-sm font-semibold text-stone-700" for="update_password_current_password">{{ __('Current Password') }}</label>
-            <input id="update_password_current_password" name="current_password" type="password" class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" autocomplete="current-password" />
-            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
-        </div>
+        @if ($requiresCurrentPassword)
+            <div>
+                <label class="text-sm font-semibold text-stone-700" for="update_password_current_password">{{ __('Current Password') }}</label>
+                <input id="update_password_current_password" name="current_password" type="password" class="mt-2 w-full rounded-xl border-stone-200 focus:border-emerald-400 focus:ring-emerald-200" autocomplete="current-password" />
+                <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
+            </div>
+        @endif
 
         <div>
             <label class="text-sm font-semibold text-stone-700" for="update_password_password">{{ __('New Password') }}</label>

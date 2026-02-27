@@ -27,6 +27,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        $request->session()->put('auth.login_method', 'password');
 
         $user = $request->user();
         $defaultRoute = route('dashboard', absolute: false);
