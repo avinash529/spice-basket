@@ -23,10 +23,13 @@ RUN npm install
 
 # Copy composer files and install PHP dependencies
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 # Copy rest of the project
 COPY . .
+
+# Run composer scripts now that artisan exists
+RUN composer run-script post-autoload-dump
 
 # Build Vite assets
 RUN npm run build
