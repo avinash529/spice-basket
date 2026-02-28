@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y \
     git curl libpng-dev libonig-dev libxml2-dev \
     libpq-dev zip unzip nginx
 
-# Install Node.js 20 (proper version for Vite)
+# Install Node.js 20
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
@@ -17,12 +17,21 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-COPY . .
+# Copy package.json FIRST and install node dependencies (clean Linux install)
+COPY package.json ./
+RUN npm install
 
+# Copy composer files and install PHP dependencies
+COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader
 
-RUN npm install && npm rebuild esbuild && npm run build
+# Copy rest of the project
+COPY . .
 
+# Build Vite assets
+RUN npm run build
+
+# Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 COPY docker/nginx.conf /etc/nginx/sites-enabled/default
