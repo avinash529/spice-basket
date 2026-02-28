@@ -8,4 +8,16 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    build: {
+        manifest: true,
+    },
 });
+```
+
+---
+
+## Fix 3 — Add ASSET_URL to Environment
+
+In Render **Environment** tab, add this new variable:
+```
+ASSET_URL = https://spicebasket.onrender.com
