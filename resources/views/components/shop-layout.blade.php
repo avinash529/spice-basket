@@ -30,8 +30,8 @@
             <header x-data="{ desktopMore: false, mobileMore: false, userMenu: false }" class="sticky top-0 z-30 border-b border-white/70 bg-white/90 backdrop-blur">
                 <div class="bg-emerald-700 text-emerald-50 text-xs">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-3">
-                        <p>Free delivery across India on orders above INR 1500</p>
-                        <p class="hidden sm:block">We ship internationally | 100% secure checkout</p>
+                        <p>Free delivery across Kerala on orders above INR 1500</p>
+                        <p class="hidden sm:block">Free delivery in Kerala | Cash on Delivery (COD) only</p>
                     </div>
                 </div>
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -159,7 +159,7 @@
             <section class="border-y border-stone-200/80 bg-white/80">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid gap-4 md:grid-cols-3">
                     <div class="rounded-2xl border border-stone-100 bg-white p-4">
-                        <p class="text-sm font-semibold text-stone-900">Free Delivery Across India</p>
+                        <p class="text-sm font-semibold text-stone-900">Free Delivery Across Kerala</p>
                         <p class="mt-1 text-sm text-stone-600">Available on orders above INR 1500.</p>
                     </div>
                     <div class="rounded-2xl border border-stone-100 bg-white p-4">
@@ -167,8 +167,8 @@
                         <p class="mt-1 text-sm text-stone-600">Packed safely for worldwide delivery.</p>
                     </div>
                     <div class="rounded-2xl border border-stone-100 bg-white p-4">
-                        <p class="text-sm font-semibold text-stone-900">Secure Checkout</p>
-                        <p class="mt-1 text-sm text-stone-600">UPI, cards, and trusted payment gateways.</p>
+                        <p class="text-sm font-semibold text-stone-900">Cash on Delivery (COD)</p>
+                        <p class="mt-1 text-sm text-stone-600">No online payment. Pay only at delivery.</p>
                     </div>
                 </div>
             </section>
@@ -209,7 +209,7 @@
                 <div class="border-t border-stone-800">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-xs text-stone-500 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <p>&copy; {{ date('Y') }} Spice Basket. All rights reserved.</p>
-                        <p>Payments accepted: UPI, Visa, Mastercard, Wallets</p>
+                        <p>Payment mode: Cash on Delivery (COD) only</p>
                     </div>
                 </div>
             </footer>

@@ -110,7 +110,7 @@ class Product extends Model
             return [];
         }
 
-        return array_keys($this->parsedWeightPricing());
+        return array_map(static fn ($weight): string => (string) $weight, array_keys($this->parsedWeightPricing()));
     }
 
     /**

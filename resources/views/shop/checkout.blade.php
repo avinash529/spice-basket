@@ -1,7 +1,7 @@
 <x-shop-layout>
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <h1 class="text-2xl font-semibold">Checkout</h1>
-        <p class="mt-2 text-gray-600">Demo checkout. No payment is collected.</p>
+        <p class="mt-2 text-gray-600">Cash on Delivery (COD) only. Pay when your order is delivered.</p>
 
         @if(session('status'))
             <div class="mt-4 rounded-xl bg-emerald-50 p-4 text-emerald-700">{{ session('status') }}</div>
@@ -110,7 +110,7 @@
             </div>
 
             <button class="mt-6 w-full rounded-full bg-emerald-600 px-6 py-3 text-white" type="submit">
-                Place order
+                Place COD order
             </button>
         </form>
     </div>

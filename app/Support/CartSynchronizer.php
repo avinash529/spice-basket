@@ -130,6 +130,7 @@ class CartSynchronizer
     {
         $defaultUnit = trim((string) $product->unit);
         $weightOptions = $product->weightOptions();
+        $weightOptionsAsStrings = array_map(static fn ($option): string => (string) $option, $weightOptions);
 
         if (empty($weightOptions)) {
             if ($defaultUnit !== '') {
@@ -143,15 +144,15 @@ class CartSynchronizer
             return 'unit';
         }
 
-        if ($requestedUnit !== '' && in_array($requestedUnit, $weightOptions, true)) {
+        if ($requestedUnit !== '' && in_array($requestedUnit, $weightOptionsAsStrings, true)) {
             return $requestedUnit;
         }
 
-        if ($defaultUnit !== '' && in_array($defaultUnit, $weightOptions, true)) {
+        if ($defaultUnit !== '' && in_array($defaultUnit, $weightOptionsAsStrings, true)) {
             return $defaultUnit;
         }
 
-        return $weightOptions[0];
+        return $weightOptionsAsStrings[0];
     }
 
     private function lineKey(int $productId, string $weight): string

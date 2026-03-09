@@ -129,6 +129,27 @@ class CartWeightSelectionTest extends TestCase
         });
     }
 
+    public function test_numeric_weight_labels_preserve_selected_unit_after_cart_sync(): void
+    {
+        $product = $this->createProduct('{"250":200,"500":250}', 120, ['unit' => '200']);
+
+        $this->post(route('cart.add', $product), [
+            'quantity' => 1,
+            'selected_weight' => '500',
+        ])->assertRedirect(route('cart.index'));
+
+        $lineKey = $product->id.'::500';
+        $response = $this->get(route('cart.index'));
+
+        $response->assertOk();
+        $response->assertSessionHas('cart', function (array $cart) use ($lineKey): bool {
+            $line = $cart[$lineKey] ?? [];
+
+            return (string) ($line['unit'] ?? '') === '500'
+                && (float) ($line['price'] ?? 0) === 250.0;
+        });
+    }
+
     public function test_active_offer_discount_is_applied_to_selected_weight_price(): void
     {
         $product = $this->createProduct('100g=120,250g=280', 120, [

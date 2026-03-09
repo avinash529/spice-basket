@@ -4,11 +4,10 @@
         <h1 class="mt-2 text-3xl sm:text-4xl font-semibold">Refund Policy</h1>
         <div class="mt-6 rounded-3xl border border-stone-100 bg-white p-6 sm:p-8 space-y-4 text-sm text-stone-700 leading-6">
             <p>If your order arrives damaged or incorrect, contact support within 48 hours with clear photos.</p>
-            <p>Approved refund requests are processed to the original payment method.</p>
+            <p>For COD orders, approved refund requests are processed after verification through the method shared by support.</p>
             <p>Perishable and opened food items are not eligible for return unless quality issues are verified.</p>
-            <p>Refund timelines depend on your payment provider and bank processing times.</p>
+            <p>Refund timelines depend on verification and bank processing time.</p>
             <p>For assistance, include your order number and delivery details in your request.</p>
         </div>
     </section>
 </x-shop-layout>
-
