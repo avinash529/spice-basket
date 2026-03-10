@@ -53,7 +53,7 @@ class GoogleAuthenticationTest extends TestCase
 
         $user = User::query()->where('email', 'firebase.new@example.com')->first();
         $this->assertNotNull($user);
-        $this->assertNull($user->password);
+        $this->assertNotEmpty($user->password);
     }
 
     public function test_firebase_google_sign_in_links_existing_user_by_email(): void
