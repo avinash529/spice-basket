@@ -114,7 +114,14 @@ class GoogleAuthController extends Controller
 
     private function fetchFirebaseUser(string $idToken, string $apiKey): array
     {
-        $response = Http::asJson()->post(
+        $request = Http::asJson();
+        $caBundle = config('services.firebase.ca_bundle');
+
+        if (is_string($caBundle) && trim($caBundle) !== '') {
+            $request = $request->withOptions(['verify' => $caBundle]);
+        }
+
+        $response = $request->post(
             "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key={$apiKey}",
             ['idToken' => $idToken]
         );
